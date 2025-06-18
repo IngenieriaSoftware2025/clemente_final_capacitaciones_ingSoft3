@@ -4,6 +4,7 @@ namespace Controllers;
 
 use MVC\Router;
 
+<<<<<<< HEAD
 class AppController
 {
 //     public static function index(Router $router)
@@ -23,6 +24,10 @@ class AppController
 
 
 public static function index(Router $router){
+=======
+class AppController {
+    public static function index(Router $router){
+>>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
         $router->render('login/index', [], $layout = 'layout/layoutlogin');
         //renderizar para la pagina principal, para que aparezaca
     }
@@ -34,4 +39,13 @@ public static function index(Router $router){
         'mensaje' => 'Test exitoso'
     ]);
 }
+<<<<<<< HEAD
 }
+=======
+}
+
+
+//docker exec -it dockerApps sh
+//lnav /var/log/apache2/error.log
+//tail -f /var/log/apache2/error.log
+>>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
