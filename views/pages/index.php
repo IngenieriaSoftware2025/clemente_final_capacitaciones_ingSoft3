@@ -1,217 +1,104 @@
-<style>
-    body {
-        background: linear-gradient(135deg,rgb(44, 62, 80) 0%,rgb(52, 152, 219) 100%);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        min-height: 100vh;
-        background-color: #f8f9fa;
-    }
+<?php
+session_start();
+?>
 
-    .header {
-        padding: 2rem;
-        text-align: center;
-        border-radius: 15px;
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-        max-width: 1140px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .logo {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #2d3748;
-        margin-bottom: 1rem;
-        max-width: 1140px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .container {
-        max-width: 1140px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .product-img {
-      border-radius: 10px;
-      width: 100%;
-      height: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      margin-bottom: 1rem;
-      background-color: #e9ecef;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6c757d;
-      font-size: 1.2rem;
-      text-align: center;
-    }
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-success text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="bi bi-house-door-fill me-2"></i>
+                        Bienvenido al Sistema de Gestion de Celulares
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="text-primary">
+                                <?= $_SESSION['user'] ?? 'Usuario' ?> 
+                            </h4>
+                            <p class="lead">
+                              
+                                <span class="badge bg-primary fs-6"><?= $_SESSION['rol'] ?? 'Sin rol' ?></span>
+                            </p>
+                        </div>
+                    </div>
 
-    .product-img:hover {
-      transform: scale(1.05) rotate(-2deg);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-    }
-    
-</style>
-<body>
-    <div class="header">
-        <?php 
-        session_start();
-        if(isset($_SESSION['user']) && isset($_SESSION['usuario_id'])) {
-            echo "<div style='background: rgba(255,255,255,0.2); padding: 10px; margin: 20px 0; text-align: center; border-radius: 10px; display: inline-block;'>";
-            echo "<strong>USUARIO EN SESIÓN:</strong> " . $_SESSION['user'] . "<br>";
-            echo "<strong>ID USUARIO:</strong> " . $_SESSION['usuario_id'];
-            echo "</div>";
-        }
-        ?>
-    <div class="logo">¡Bienvenido al Sistema PEREZ COMISIONES!</div>
-    </div>
-    
-    <div class="container">
-        <div class="row mb-5">
-            <div class="col-md-8 mx-auto text-center">
-                <p class="lead text-white">
-                    "Gestiona comisiones del sistema PEREZ de manera eficiente. Registra comisiones por tipo (Transmisiones/Informática), asigna personal, controla usuarios y permisos, mantén el historial de actividades y visualiza estadísticas en tiempo real."
-                </p>
-            </div>
-        </div>
-        
-        <div class="row mb-4">
-            <div class="col-12 text-center mb-4">
-                <h2 class="text-uppercase fw-bold text-white">Módulos del Sistema</h2>
-                <p class="text-light">Gestiona todos los aspectos de las comisiones desde una sola plataforma.</p>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                        <img src="https://img.freepik.com/vector-premium/usuarios-grupo-personas-icono-perfil-usuario_24877-40756.jpg" alt="Gestión de Usuarios" style="max-width:100%; max-height:100%; border-radius:10px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Gestión de Usuarios</h5>
-                        <p class="card-text text-muted">Administra personal del sistema con información completa y fotografías.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/usuarios" class="btn btn-primary">Acceder</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                      <img src="https://img.freepik.com/vector-gratis/diseno-multimedia-color_1284-883.jpg?semt=ais_items_boosted&w=740" alt="aplicaciones" style="max-width:100%; max-height:100%; border-radius:10px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Control de Aplicaciones</h5>
-                        <p class="card-text text-muted">Gestiona las aplicaciones del sistema con nombres y configuraciones.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/aplicacion" class="btn btn-primary">Acceder</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                      <img src="https://img.freepik.com/vector-gratis/desarrollo-aplicaciones-moviles_24908-58350.jpg?semt=ais_hybrid&w=740" alt="permisos" style="max-width:100%; max-height:100%; border-radius:10px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Sistema de Permisos</h5>
-                        <p class="card-text text-muted">Controla el acceso con mínimo 3 tipos de permisos de forma segura.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/permisos" class="btn btn-primary">Acceder</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                      <img src="https://static.vecteezy.com/system/resources/previews/005/190/843/non_2x/acquiring-permits-concept-icon-obtaining-license-idea-thin-line-illustration-getting-approval-legal-documents-and-permissions-formal-application-isolated-outline-drawing-editable-stroke-vector.jpg" alt="permisos" style="max-width:100%; max-height:100%; border-radius:10px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Asignación de Permisos</h5>
-                        <p class="card-text text-muted">Asigna permisos específicos a usuarios para control de acceso granular.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/asignacionpermisos" class="btn btn-primary">Acceder</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <i class="bi bi-people text-primary" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title mt-2">Usuarios</h6>
+                                    <a href="/clemente_final_capacitaciones_ingSoft3/registro" class="btn btn-primary btn-sm">Gestionar</a>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="row mb-4">
-            <div class="col-md-4 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                        <img src="https://img.freepik.com/vector-gratis/concepto-trabajo-equipo-negocios_1284-4006.jpg" alt="Comisiones" style="max-width:100%; max-height:100%; border-radius:10px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Gestión de Comisiones</h5>
-                        <p class="card-text text-muted">Registra comisiones por tipo: Transmisiones o Informática con duración y ubicación.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/comisiones" class="btn btn-primary">Acceder</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                      <img src="https://img.freepik.com/vector-gratis/grupo-personas-trabajando-juntas_24877-51310.jpg" alt="Personal" style="max-width:100%; max-height:100%; border-radius:10px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Asignación de Personal</h5>
-                        <p class="card-text text-muted">Asigna personal a comisiones con validación anti-duplicación.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/comisionpersonal" class="btn btn-primary">Acceder</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                      <img src="https://img.freepik.com/vector-gratis/mapa-mundo-ubicacion-pin_24877-54109.jpg" alt="Mapa" style="max-width:100%; max-height:100%; border-radius:10px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Ubicación PEREZ</h5>
-                        <p class="card-text text-muted">Visualiza la ubicación del sistema PEREZ COMISIONES en el mapa.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/mapa" class="btn btn-primary">Acceder</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <i class="bi bi-shield-check text-success" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title mt-2">Roles</h6>
+                                    <a href="/clemente_final_capacitaciones_ingSoft3/roles" class="btn btn-success btn-sm">Gestionar</a>
+                                </div>
+                            </div>
+                        </div>
 
-        <div class="row mb-4">
-            <div class="col-md-6 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                        <img src="https://img.freepik.com/vector-gratis/analisis-datos-graficos_24877-51215.jpg" alt="Estadísticas" style="max-width:100%; max-height:100%; border-radius:10px;">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <i class="bi bi-key text-warning" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title mt-2">Permisos</h6>
+                                    <a href="/clemente_final_capacitaciones_ingSoft3/permisos" class="btn btn-warning btn-sm">Gestionar</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <i class="bi bi-phone text-info" style="font-size: 2rem;"></i>
+                                    <h6 class="card-title mt-2">Inventario</h6>
+                                    <a href="/clemente_final_capacitaciones_ingSoft3/inventario" class="btn btn-info btn-sm">Ver</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Estadísticas y Gráficas</h5>
-                        <p class="card-text text-muted">Visualiza estadísticas de comisiones con gráficas interactivas y reportes.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/estadisticas" class="btn btn-primary">Acceder</a>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="text-muted">Tienes Acceso a:</h5>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <a href="/clemente_final_capacitaciones_ingSoft3/marcas" class="btn btn-outline-secondary w-100">
+                                <i class="bi bi-tag me-2"></i>Marcas
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <a href="/clemente_final_capacitaciones_ingSoft3/clientes" class="btn btn-outline-secondary w-100">
+                                <i class="bi bi-person-vcard me-2"></i>Clientes
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <a href="/clemente_final_capacitaciones_ingSoft3/reparaciones" class="btn btn-outline-secondary w-100">
+                                <i class="bi bi-tools me-2"></i>Reparaciones
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <p class="text-muted">
+                                <small>
+                                   Sesión iniciada
+                                </small>
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-img-top product-img">
-                      <img src="https://img.freepik.com/vector-gratis/concepto-historial-navegacion_23-2148207095.jpg" alt="Historial" style="max-width:100%; max-height:100%; border-radius:10px;">
-                    </div>
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">Historial de Actividades</h5>
-                        <p class="card-text text-muted">Auditoría completa con historial de actividades y reportes en DataTables.</p>
-                        <a href="/clemente_final_capacitaciones_ingSoft3/historial" class="btn btn-primary">Acceder</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row mt-5">
-            <div class="col-md-6 mx-auto text-center">
-                <h2 class="mb-4 text-uppercase fw-bold text-white">Características Principales</h2><br>
-                <p class="text-light"><strong>Organiza:</strong> Gestiona comisiones de Transmisiones e Informática con control de duración.</p>
-                <p class="text-light"><strong>Controla:</strong> Valida asignaciones de personal evitando duplicaciones y conflictos.</p>
-                <p class="text-light"><strong>Administra:</strong> Supervisa todo desde una interfaz intuitiva con mapas y estadísticas.</p>
-                <p class="text-light"><strong>Audita:</strong> Mantén historial completo de actividades para cumplir normativas.</p>
-                <a href="/clemente_final_capacitaciones_ingSoft3/comisiones" class="btn btn-light btn-lg mt-3">Comenzar a gestionar comisiones</a>
             </div>
         </div>
     </div>
-    <script src="<?= asset('build/js/inicio.js') ?>"></script>
-</body>
+</div>

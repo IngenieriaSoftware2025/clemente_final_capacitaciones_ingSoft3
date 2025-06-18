@@ -51,7 +51,13 @@ class Router
         }
     }
 
-    public function render($view, $datos = [], $layout = "layouts/layout")
+
+
+
+
+
+    /////////////////////RUTA
+    public function render($view, $datos = [], $layout = "layout/layout")
     {
 
         // Leer lo que le pasamos  a la vista
@@ -65,6 +71,7 @@ class Router
         include_once __DIR__ . "/views/$view.php";
         $contenido = ob_get_clean(); // Limpia el Buffer
         include_once __DIR__ . "/views/$layout.php";
+           /////////////////////RUTA
     }
 
     public function load($view, $datos = []){
