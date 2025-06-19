@@ -32,7 +32,7 @@ const GuardarAsignacion = async (event) => {
     const body = new FormData(FormAsignacionPermisos);
     body.append('asignacion_usuario_asigno', 1); 
     
-    const url = '/clemente_final_capacitaciones_ingSoft3/asignacionpermisos/guardarAPI';
+    const url = '/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/guardar';
     const config = {
         method: 'POST',
         body
@@ -72,7 +72,7 @@ const GuardarAsignacion = async (event) => {
 
 const CargarUsuarios = async () => {
     try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/asignacionpermisos/buscarUsuariosAPI');
+        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscarUsuarios');
         const datos = await respuesta.json();
         
         if (datos.codigo === 1) {
@@ -98,7 +98,7 @@ const CargarUsuarios = async () => {
 
 const CargarAplicaciones = async () => {
     try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/asignacionpermisos/buscarAplicacionesAPI');
+        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscarAplicaciones');
         const datos = await respuesta.json();
         
         if (datos.codigo === 1) {
@@ -117,7 +117,7 @@ const CargarAplicaciones = async () => {
 
 const CargarPermisos = async (appId) => {
     try {
-        const respuesta = await fetch(`/clemente_final_capacitaciones_ingSoft3/asignacionpermisos/buscarPermisosAPI?app_id=${appId}`);
+        const respuesta = await fetch(`/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscarPermisos?app_id=${appId}`);
         const datos = await respuesta.json();
         
         if (datos.codigo === 1) {
@@ -135,7 +135,7 @@ const CargarPermisos = async (appId) => {
 }
 
 const BuscarAsignaciones = async () => {
-    const url = `/clemente_final_capacitaciones_ingSoft3/asignacionpermisos/buscarAPI`;
+    const url = `/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscar`;
     const config = {
         method: 'GET'
     }
@@ -266,7 +266,7 @@ const RevocarPermiso = async (e) => {
     });
 
     if (AlertaConfirmarRevocacion.isConfirmed) {
-        const url = `/clemente_final_capacitaciones_ingSoft3/asignacionpermisos/revocarAPI?id=${idAsignacion}`;
+        const url = `/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/revocar?id=${idAsignacion}`;
         const config = {
             method: 'GET'
         }
@@ -377,7 +377,7 @@ const buscarPermisosUsuario = async (usuarioId) => {
     }
 
     try {
-        const respuesta = await fetch(`/clemente_final_capacitaciones_ingSoft3/asignacionpermisos/buscarPermisosUsuarioAPI?usuario_id=${usuarioId}`);
+        const respuesta = await fetch(`/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscarPermisosUsuario?usuario_id=${usuarioId}`);
         const datos = await respuesta.json();
         
         if (datos.codigo === 1) {

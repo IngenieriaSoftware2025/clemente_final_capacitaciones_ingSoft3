@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -52,40 +52,39 @@
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin: 0;">
 
-                    <!-- GESTIÓN DE USUARIOS -->
+          
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                            <option value="">👥 Usuarios</option>
+                            <option value=""> Usuarios</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/usuarios">Gestión de Usuarios</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/aplicacion">Aplicaciones</option>
                         </select>
                     </li>
 
-                    <!-- COMISIONES -->
+               
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                            <option value="">📋 Comisiones</option>
+                            <option value="">Comisiones</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/comisiones">Gestión de Comisiones</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/comisionpersonal">Asignación de Personal</option>
                         </select>
                     </li>
 
-                    <!-- PERMISOS Y ROLES -->
+                 
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                            <option value="">🛡️ Seguridad</option>
+                            <option value=""> Seguridad</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/permisos">Gestión de Permisos</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/asignacionpermisos">Asignación de Permisos</option>
                         </select>
                     </li>
 
-                    <!-- REPORTES Y ANÁLISIS -->
+            
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                            <option value="">📊 Reportes</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/historial">Historial de Actividades</option>
+                            <option value=""> Reportes</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/estadisticas">Estadísticas</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/mapa">Ubicación en Mapa</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/mapa">Ubicación</option>
                         </select>
                     </li>
 
@@ -98,13 +97,13 @@
                     <div class="d-flex align-items-center me-3">
                         <span class="text-white me-3">
                             <i class="bi bi-person-circle me-1"></i>
-                            <?= $_SESSION['user'] ?> (ID: <?= $_SESSION['usuario_id'] ?>)
+                            <?= $_SESSION['user'] ?>
                         </span>
                     </div>
                     <div class="col-lg-2 d-grid mb-lg-0 mb-2">
                         <div class="d-flex gap-2">
                             <a href="/clemente_final_capacitaciones_ingSoft3/logout" class="btn btn-danger">
-                                <i class="bi bi-box-arrow-right"></i>Cerrar Sesión
+                                <i class="bi bi-box-arrow-right"></i>Salir
                             </a>
                         </div>
                     </div>

@@ -12,6 +12,8 @@ const InputFechaFin = document.getElementById('fecha_fin');
 const BtnLimpiarFiltros = document.getElementById('BtnLimpiarFiltros');
 const seccionTabla = document.getElementById('seccionTabla');
 
+
+
 const cargarUsuarios = async () => {
     const url = `/clemente_final_capacitaciones_ingSoft3/actividades/buscarUsuariosAPI`; 
     const config = {

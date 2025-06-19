@@ -139,8 +139,8 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="nombre_permiso" class="form-label">Nombre del Permiso </label>
-                                    <input type="text" id="nombre_permiso" name="nombre_permiso" 
+                                    <label for="permiso_nombre" class="form-label">Nombre del Permiso </label>
+                                    <input type="text" id="permiso_nombre" name="permiso_nombre" 
                                            class="form-control" 
                                            placeholder="Ej: Administrar Usuarios" >
                                 </div>

@@ -1,12 +1,17 @@
-<div class="row justify-content-center p-3">
-    <div class="col-lg-10">
-        <div class="card shadow-lg">
-            <div class="card-body p-4">
-                <h2 class="text-center mb-4" >Ubicación de Mi Tienda</h2>
-                <div id="map" style="height: 400px; border-radius: 10px;"></div>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center" style="background: linear-gradient(135deg,rgb(114, 70, 196) 0%,rgb(49, 22, 98) 100%);">
+                    <h5 class="mb-1">¡Sistema de Gestión PEREZ COMISIONES!</h5>
+                    <h4 class="mb-0">UBICACIÓN DEL SISTEMA</h4>
+                </div>
+                <div class="card-body">
+                    <div id="map" style="height: 400px; border-radius: 10px;"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="<?= asset('build/js/mapas/index.js') ?>"></script>
+<script src="<?= asset('build/js/mapa/index.js') ?>"></script>

@@ -30,7 +30,7 @@ class Aplicacion extends ActiveRecord {
         $this->app_nombre_largo = $aplicacion['app_nombre_largo'] ?? '';
         $this->app_nombre_medium = $aplicacion['app_nombre_medium'] ?? '';
         $this->app_nombre_corto = $aplicacion['app_nombre_corto'] ?? '';
-        $this->app_fecha_creacion = $aplicacion['app_fecha_creacion'] ?? '';
+        $this->app_fecha_creacion = $aplicacion['app_fecha_creacion'] ?? NULL ;
         $this->app_situacion = $aplicacion['app_situacion'] ?? 1;
     }
 

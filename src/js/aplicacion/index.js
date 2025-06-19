@@ -26,7 +26,7 @@ const GuardarAplicacion = async (event) => {
     }
 
     const body = new FormData(FormAplicaciones);
-    const url = '/clemente_final_capacitaciones_ingSoft3/aplicacion/guardarAPI';
+    const url = '/clemente_final_capacitaciones_ingSoft3/API/aplicacion/guardar';
     const config = {
         method: 'POST',
         body
@@ -65,7 +65,7 @@ const GuardarAplicacion = async (event) => {
 }
 
 const BuscarAplicaciones = async () => {
-    const url = `/clemente_final_capacitaciones_ingSoft3/aplicacion/buscarAPI`;
+    const url = `/clemente_final_capacitaciones_ingSoft3/API/aplicacion/buscar`;
     const config = {
         method: 'GET'
     }
@@ -214,7 +214,7 @@ const ModificarAplicacion = async (event) => {
     }
 
     const body = new FormData(FormAplicaciones);
-    const url = '/clemente_final_capacitaciones_ingSoft3/aplicacion/modificarAPI';
+    const url = '/clemente_final_capacitaciones_ingSoft3/API/aplicacion/modificar';
     const config = {
         method: 'POST',
         body
@@ -268,7 +268,7 @@ const EliminarAplicacion = async (e) => {
     });
 
     if (AlertaConfirmarEliminar.isConfirmed) {
-        const url = `/clemente_final_capacitaciones_ingSoft3/aplicacion/eliminarAPI?id=${idAplicacion}`;
+        const url = `/clemente_final_capacitaciones_ingSoft3/API/aplicacion/eliminar?id=${idAplicacion}`;
         const config = {
             method: 'GET'
         }
