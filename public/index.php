@@ -4,6 +4,10 @@ require_once __DIR__ . '/../includes/app.php';
 use MVC\Router;
 use Controllers\AppController;
 use Controllers\LoginController;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
 use Controllers\UsuariosController;
 use Controllers\AplicacionController;
 use Controllers\PermisosController;
@@ -13,10 +17,32 @@ use Controllers\ComisionPersonalController;
 use Controllers\EstadisticasController;
 use Controllers\HistorialActController;
 use Controllers\MapasController;
+<<<<<<< HEAD
+=======
+=======
+use Controllers\RegistroController;
+use Controllers\MarcasController;
+use Controllers\ModelosController;
+use Controllers\ClientesController;
+use Controllers\EstadisticaController;
+use Controllers\InventarioController;
+use Controllers\MapaController;
+use Controllers\ReparacionesController;
+use Controllers\RolesController;
+use Controllers\PermisosController;
+use Controllers\RolesPermisosController;
+use Controllers\RutasActividadesController;
+use Controllers\VentasController;
+>>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
+>>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
 
 $router = new Router();
 $router->setBaseURL('/' . $_ENV['APP_NAME']);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
 // RUTA PRINCIPAL
 $router->get('/login', [LoginController::class,'renderizarPagina']);
 $router->get('/inicio', [AppController::class,'index']);
@@ -94,6 +120,39 @@ $router->get('/historial/buscarActividadPorTipoAPI', [HistorialActController::cl
 $router->get('/historial/buscarActividadPorUsuarioAPI', [HistorialActController::class, 'buscarActividadPorUsuarioAPI']);
 $router->get('/historial/buscarActividadPorDiaAPI', [HistorialActController::class, 'buscarActividadPorDiaAPI']);
 $router->get('/historial/buscarActividadPorModuloAPI', [HistorialActController::class, 'buscarActividadPorModuloAPI']);
+<<<<<<< HEAD
+=======
+=======
+//  LOGIN RUTA PRINCIPAL AL ABRIR DESDE DOCKER
+$router->get('/', [LoginController::class, 'renderizarPagina']);
+
+// Rutas del sistema de login
+$router->get('/login', [LoginController::class, 'renderizarPagina']); //MOSTRAR FORMULARIO DE LOGIN
+$router->post('/login', [LoginController::class, 'login']); //PROCESAR DATOS LOGIN 
+$router->get('/inicio', [LoginController::class, 'renderInicio']); //PAGINA PRINCIPAL PROTEGIDA ?
+$router->post('/logout', [LoginController::class, 'logout']); //CERRAR SESION ?
+
+// Ruta de prueba
+$router->post('/test', [AppController::class, 'testLogin']);
+
+// REGISTRO/USUARIOS
+$router->get('/registro', [RegistroController::class, 'renderizarPagina']);
+$router->post('/registro/guardarAPI', [RegistroController::class, 'guardarAPI']);
+$router->get('/registro/buscarAPI', [RegistroController::class, 'buscarAPI']);
+$router->post('/registro/modificarAPI', [RegistroController::class, 'modificarAPI']);
+$router->get('/registro/eliminarAPI', [RegistroController::class, 'eliminarAPI']);
+$router->get('/registro/obtenerRolesAPI', [RegistroController::class, 'obtenerRolesAPI']);
+
+
+// ROLES
+$router->get('/roles', [RolesController::class, 'renderizarPagina']);
+$router->post('/roles/guardarAPI', [RolesController::class, 'guardarAPI']);
+$router->get('/roles/buscarAPI', [RolesController::class, 'buscarAPI']);
+$router->post('/roles/modificarAPI', [RolesController::class, 'modificarAPI']);
+$router->get('/roles/eliminarAPI', [RolesController::class, 'eliminarAPI']);
+$router->get('/roles/estadisticasAPI', [RolesController::class, 'estadisticasAPI']);
+>>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
+>>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
 
 
 $router->comprobarRutas();

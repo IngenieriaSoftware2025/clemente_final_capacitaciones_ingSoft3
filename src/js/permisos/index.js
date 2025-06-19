@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
 const llenarFormulario = (event) => {
     const datos = event.currentTarget.dataset;
 
@@ -75,10 +79,62 @@ const ModificarPermiso = async (event) => {
                 title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
+<<<<<<< HEAD
+=======
+=======
+import Swal from "sweetalert2";
+//import { Dropdown } from "bootstrap";
+
+
+const FormPermisos = document.getElementById('FormPermisos');
+const BtnGuardar = document.getElementById('BtnGuardar');
+const BtnModificar = document.getElementById('BtnModificar');
+const BtnLimpiar = document.getElementById('BtnLimpiar');
+const BtnBuscar = document.getElementById('BtnBuscar');
+const seccionTabla = document.getElementById('seccionTabla');
+const bodyPermisos = document.getElementById('bodyPermisos');
+
+
+const GuardarPermiso = async (event) => {
+    event.preventDefault(); // Evita que se recargue la página
+
+    // Obtener los datos del formulario
+    const formData = new FormData(FormPermisos);
+    
+    try {
+        // Enviar datos al servidor
+        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/permisos/guardarAPI', {
+            method: 'POST',
+            body: formData
+        });
+
+        const datos = await respuesta.json();
+
+        if (datos.codigo == 1) {
+            // Si todo salió bien
+            Swal.fire({
+                icon: "success",
+                title: "¡Éxito!",
+                text: datos.mensaje,
+            });
+            LimpiarFormulario();
+            BuscarPermisos();
+        } else {
+            // Si hubo error
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: datos.mensaje,
+>>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
+>>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
             });
         }
 
     } catch (error) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
         console.log(error)
     }
     BtnModificar.disabled = false;
@@ -167,4 +223,163 @@ document.addEventListener('DOMContentLoaded', () => {
             EliminarPermiso(id);
         }
     });
+<<<<<<< HEAD
 });
+=======
+});
+=======
+        console.log(error);
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudo conectar con el servidor",
+        });
+    }
+}
+
+//FUNCIÓN PARA BUSCAR PERMISOS
+const BuscarPermisos = async () => {
+    try {
+        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/permisos/buscarAPI');
+        const datos = await respuesta.json();
+
+        if (datos.codigo == 1) {
+            // Limpiar la tabla
+            bodyPermisos.innerHTML = '';
+
+            // Llenar la tabla con los datos
+            datos.data.forEach((permiso, index) => {
+                bodyPermisos.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${permiso.nombre_permiso}</td>
+                        <td>${permiso.descripcion}</td>
+                        <td>${permiso.fecha_creacion || 'Sin fecha'}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm me-1" 
+                                    onclick="EditarPermiso(${permiso.id_permiso}, '${permiso.nombre_permiso}', '${permiso.descripcion}')">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                            <button class="btn btn-danger btn-sm" 
+                                    onclick="EliminarPermiso(${permiso.id_permiso}, '${permiso.nombre_permiso}')">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudieron cargar los permisos",
+        });
+    }
+}
+
+// FUNCIÓN PARA MOSTRAR/OCULTAR TABLA
+const MostrarTabla = () => {
+    if (seccionTabla.style.display === 'none') {
+        seccionTabla.style.display = 'block';
+        BuscarPermisos();
+    } else {
+        seccionTabla.style.display = 'none';
+    }
+}
+
+//FUNCIÓN PARA LIMPIAR FORMULARIO
+const LimpiarFormulario = () => {
+    FormPermisos.reset();
+    BtnGuardar.classList.remove('d-none');
+    BtnModificar.classList.add('d-none');
+}
+
+//FUNCIÓN PARA EDITAR PERMISO
+window.EditarPermiso = (id, nombre, descripcion) => {
+    // Llenar el formulario con los datos
+    document.getElementById('id_permiso').value = id;
+    document.getElementById('nombre_permiso').value = nombre;
+    document.getElementById('descripcion').value = descripcion;
+
+    // Cambiar los botones
+    BtnGuardar.classList.add('d-none');
+    BtnModificar.classList.remove('d-none');
+
+    // Ir arriba de la página
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+//FUNCIÓN PARA MODIFICAR PERMISO
+const ModificarPermiso = async () => {
+    const formData = new FormData(FormPermisos);
+    
+    try {
+        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/permisos/modificarAPI', {
+            method: 'POST',
+            body: formData
+        });
+
+        const datos = await respuesta.json();
+
+        if (datos.codigo == 1) {
+            Swal.fire({
+                icon: "success",
+                title: "¡Éxito!",
+                text: datos.mensaje,
+            });
+            LimpiarFormulario();
+            BuscarPermisos();
+        } else {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: datos.mensaje,
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// FUNCIÓN PARA ELIMINAR PERMISO
+window.EliminarPermiso = async (id, nombre) => {
+    const confirmacion = await Swal.fire({
+        title: `¿Eliminar "${nombre}"?`,
+        text: "Esta acción no se puede deshacer",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+    });
+
+    if (confirmacion.isConfirmed) {
+        try {
+            const respuesta = await fetch(`/clemente_final_capacitaciones_ingSoft3/permisos/eliminarAPI?id=${id}`);
+            const datos = await respuesta.json();
+
+            if (datos.codigo == 1) {
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Eliminado!",
+                    text: datos.mensaje,
+                });
+                BuscarPermisos();
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+//FUNCIONES CON LOS BOTONES
+FormPermisos.addEventListener('submit', GuardarPermiso);
+BtnLimpiar.addEventListener('click', LimpiarFormulario);
+BtnModificar.addEventListener('click', ModificarPermiso);
+BtnBuscar.addEventListener('click', MostrarTabla);
+>>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
+>>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
