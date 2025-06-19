@@ -11,24 +11,23 @@ const llenarFormulario = (event) => {
     document.getElementById('permiso_tipo').value = datos.tipo;
     document.getElementById('permiso_motivo').value = datos.motivo;
 
-    // Cambiar la visibilidad de los botones
+
     BtnGuardar.style.display = 'none';
     BtnModificar.style.display = 'inline-block';
     BtnLimpiar.style.display = 'inline-block';
 }
 
-// También necesitarás la función para limpiar el formulario
 const limpiarTodo = () => {
     FormPermisos.reset();
     document.getElementById('permiso_id').value = '';
     
-    // Restaurar la visibilidad de los botones
+
     BtnGuardar.style.display = 'inline-block';
     BtnModificar.style.display = 'none';
     BtnLimpiar.style.display = 'inline-block';
 }
 
-// Función para modificar permiso
+
 const ModificarPermiso = async (event) => {
     event.preventDefault();
     BtnModificar.disabled = true;
@@ -85,7 +84,6 @@ const ModificarPermiso = async (event) => {
 }
 
         
-//import { Dropdown } from "bootstrap";
 
 
 const FormPermisos = document.getElementById('FormPermisos');
@@ -98,13 +96,12 @@ const bodyPermisos = document.getElementById('bodyPermisos');
 
 
 const GuardarPermiso = async (event) => {
-    event.preventDefault(); // Evita que se recargue la página
+    event.preventDefault(); 
 
-    // Obtener los datos del formulario
     const formData = new FormData(FormPermisos);
     
     try {
-        // Enviar datos al servidor
+
         const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/permisos/guardarAPI', {
             method: 'POST',
             body: formData
@@ -113,7 +110,7 @@ const GuardarPermiso = async (event) => {
         const datos = await respuesta.json();
 
         if (datos.codigo == 1) {
-            // Si todo salió bien
+ 
             Swal.fire({
                 icon: "success",
                 title: "¡Éxito!",
@@ -122,7 +119,7 @@ const GuardarPermiso = async (event) => {
             LimpiarFormulario();
             BuscarPermisos();
         } else {
-            // Si hubo error
+      
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -138,7 +135,6 @@ const GuardarPermiso = async (event) => {
     BtnModificar.disabled = false;
 }
 
-// Función para eliminar permiso
 const EliminarPermiso = async (id) => {
     const result = await Swal.fire({
         title: '¿Está seguro?',
@@ -197,20 +193,20 @@ const EliminarPermiso = async (id) => {
     }
 }
 
-// Event listeners
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Cargar datos iniciales
+
     CargarUsuarios();
     CargarAplicaciones();
     BuscarPermisos();
 
-    // Event listeners para botones principales
+
     BtnGuardar.addEventListener('click', GuardarPermiso);
     BtnModificar.addEventListener('click', ModificarPermiso);
     BtnLimpiar.addEventListener('click', limpiarTodo);
     BtnBuscar.addEventListener('click', BuscarPermisos);
 
-    // Event listeners para botones de la tabla (usando delegación de eventos)
+
     document.addEventListener('click', (e) => {
         if (e.target.closest('.modificar')) {
             llenarFormulario(e);
@@ -233,17 +229,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
 
-//FUNCIÓN PARA BUSCAR PERMISOS
+
 const BuscarPermisos = async () => {
     try {
         const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/permisos/buscarAPI');
         const datos = await respuesta.json();
 
         if (datos.codigo == 1) {
-            // Limpiar la tabla
+
             bodyPermisos.innerHTML = '';
 
-            // Llenar la tabla con los datos
+
             datos.data.forEach((permiso, index) => {
                 bodyPermisos.innerHTML += `
                     <tr>
@@ -276,7 +272,7 @@ const BuscarPermisos = async () => {
     }
 }
 
-// FUNCIÓN PARA MOSTRAR/OCULTAR TABLA
+
 const MostrarTabla = () => {
     if (seccionTabla.style.display === 'none') {
         seccionTabla.style.display = 'block';
@@ -286,29 +282,29 @@ const MostrarTabla = () => {
     }
 }
 
-//FUNCIÓN PARA LIMPIAR FORMULARIO
+
 const LimpiarFormulario = () => {
     FormPermisos.reset();
     BtnGuardar.classList.remove('d-none');
     BtnModificar.classList.add('d-none');
 }
 
-//FUNCIÓN PARA EDITAR PERMISO
+
 window.EditarPermiso = (id, nombre, descripcion) => {
-    // Llenar el formulario con los datos
+
     document.getElementById('id_permiso').value = id;
     document.getElementById('nombre_permiso').value = nombre;
     document.getElementById('descripcion').value = descripcion;
 
-    // Cambiar los botones
+
     BtnGuardar.classList.add('d-none');
     BtnModificar.classList.remove('d-none');
 
-    // Ir arriba de la página
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-//FUNCIÓN PARA MODIFICAR PERMISO
+
 const ModificarPermiso1 = async () => {
     const formData = new FormData(FormPermisos);
     
@@ -341,7 +337,7 @@ const ModificarPermiso1 = async () => {
     }
 }
 
-// FUNCIÓN PARA ELIMINAR PERMISO
+
 window.EliminarPermiso = async (id, nombre) => {
     const confirmacion = await Swal.fire({
         title: `¿Eliminar "${nombre}"?`,
@@ -372,7 +368,7 @@ window.EliminarPermiso = async (id, nombre) => {
     }
 }
 
-//FUNCIONES CON LOS BOTONES
+
 FormPermisos.addEventListener('submit', GuardarPermiso);
 BtnLimpiar.addEventListener('click', LimpiarFormulario);
 BtnModificar.addEventListener('click', ModificarPermiso);

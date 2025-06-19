@@ -1,10 +1,7 @@
 
-
-
-// VARIABLES GLOBALES
 let graficos = {};
 
-// URLs de las APIs
+
 const urls = {
     comisionesTipo: '/clemente_final_capacitaciones_ingSoft3/API/estadisticas/comisionesPorTipo',
     comisionesEstado: '/clemente_final_capacitaciones_ingSoft3/API/estadisticas/comisionesPorEstado', 
@@ -18,7 +15,7 @@ const urls = {
     resumenGeneral: '/clemente_final_capacitaciones_ingSoft3/API/estadisticas/resumenGeneral'
 };
 
-// FUNCIÓN PARA OBTENER COLORES DINÁMICOS
+
 const obtenerColor = (index) => {
     const colores = [
         'rgba(255, 99, 132, 0.8)',   // Rojo
@@ -35,9 +32,9 @@ const obtenerColor = (index) => {
     return colores[index % colores.length];
 };
 
-// INICIALIZAR GRÁFICOS
+
 const inicializarGraficos = () => {
-    // Gráfico 1: Comisiones por Tipo (PIE)
+ 
     const ctx1 = document.getElementById('grafico1').getContext('2d');
     graficos.comisionesTipo = new Chart(ctx1, {
         type: 'pie',
@@ -72,7 +69,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 2: Estados de Comisiones (DOUGHNUT)
+
     const ctx2 = document.getElementById('grafico2').getContext('2d');
     graficos.comisionesEstado = new Chart(ctx2, {
         type: 'doughnut',
@@ -98,7 +95,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 3: Personal más Asignado (BAR HORIZONTAL)
+
     const ctx3 = document.getElementById('grafico3').getContext('2d');
     graficos.personalAsignado = new Chart(ctx3, {
         type: 'bar',
@@ -132,7 +129,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 4: Usuarios Creadores (BAR)
+
     const ctx4 = document.getElementById('grafico4').getContext('2d');
     graficos.usuariosCreadores = new Chart(ctx4, {
         type: 'bar',
@@ -165,7 +162,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 5: Duración Promedio (BAR)
+
     const ctx5 = document.getElementById('grafico5').getContext('2d');
     graficos.duracionPromedio = new Chart(ctx5, {
         type: 'bar',
@@ -195,7 +192,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 6: Ubicaciones Frecuentes (PIE)
+
     const ctx6 = document.getElementById('grafico6').getContext('2d');
     graficos.ubicacionesFrecuentes = new Chart(ctx6, {
         type: 'pie',
@@ -221,7 +218,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 7: Comisiones por Mes (LINE)
+
     const ctx7 = document.getElementById('grafico7').getContext('2d');
     graficos.comisionesMes = new Chart(ctx7, {
         type: 'line',
@@ -248,7 +245,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 8: Comisiones Activas vs Personal (BAR)
+
     const ctx8 = document.getElementById('grafico8').getContext('2d');
     graficos.comisionesActivas = new Chart(ctx8, {
         type: 'bar',
@@ -281,7 +278,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 9: Disponibilidad Personal (DOUGHNUT)
+
     const ctx9 = document.getElementById('grafico9').getContext('2d');
     graficos.personalDisponible = new Chart(ctx9, {
         type: 'doughnut',
@@ -306,7 +303,7 @@ const inicializarGraficos = () => {
         }
     });
 
-    // Gráfico 10: Resumen General (BAR)
+ 
     const ctx10 = document.getElementById('grafico10').getContext('2d');
     graficos.resumenGeneral = new Chart(ctx10, {
         type: 'bar',
@@ -340,7 +337,7 @@ const inicializarGraficos = () => {
     });
 };
 
-// FUNCIONES PARA CARGAR DATOS
+
 const cargarComisionesPorTipo = async () => {
     try {
         const response = await fetch(urls.comisionesTipo);
@@ -461,7 +458,6 @@ const cargarComisionesPorMes = async () => {
         const resultado = await response.json();
 
         if (resultado.codigo === 1 && resultado.data) {
-            // Agrupar datos por tipo de comisión
             const tiposComision = [...new Set(resultado.data.map(item => item.comision_tipo))];
             const meses = [...new Set(resultado.data.map(item => item.mes))].sort();
 
@@ -564,14 +560,14 @@ const cargarResumenGeneral = async () => {
     }
 };
 
-// FUNCIÓN PRINCIPAL PARA CARGAR TODOS LOS DATOS
+
 const cargarTodosLosDatos = async () => {
     try {
-        // Mostrar indicador de carga si existe
+
         const loader = document.getElementById('loader');
         if (loader) loader.style.display = 'block';
 
-        // Cargar todos los gráficos de forma asíncrona
+
         await Promise.all([
             cargarComisionesPorTipo(),
             cargarComisionesPorEstado(),
@@ -585,7 +581,7 @@ const cargarTodosLosDatos = async () => {
             cargarResumenGeneral()
         ]);
 
-        // Ocultar indicador de carga
+
         if (loader) loader.style.display = 'none';
 
         Toast.fire({
@@ -602,12 +598,11 @@ const cargarTodosLosDatos = async () => {
     }
 };
 
-// INICIALIZACIÓN
+
 document.addEventListener('DOMContentLoaded', () => {
     inicializarGraficos();
     cargarTodosLosDatos();
     
-    // Actualizar datos cada 5 minutos
     setInterval(cargarTodosLosDatos, 300000);
 
 });
@@ -623,7 +618,7 @@ const grafico3 = document.getElementById("grafico3").getContext("2d");
 const grafico4 = document.getElementById("grafico4").getContext("2d");
 const grafico5 = document.getElementById("grafico5").getContext("2d");
 
-// Función para obtener colores dinámicos
+
 function getColorForIndex(index) {
     const colores = [
         'rgba(59, 130, 246, 0.8)',   // Azul
@@ -639,7 +634,7 @@ function getColorForIndex(index) {
     return colores[index % colores.length];
 }
 
-// Crear las gráficas
+
 window.graficaReparacionesClientes = new Chart(grafico1, {
     type: 'bar',
     data: {

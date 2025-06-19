@@ -48,20 +48,20 @@ const cargarUsuarios = async () => {
 }
 
 const organizarDatosPorModulo = (data) => {
-    // MÓDULOS ACTUALIZADOS PARA TU PROYECTO
+
     const modulos = ['LOGIN', 'USUARIOS', 'CLIENTES', 'MARCAS', 'MODELOS', 'INVENTARIO', 'REPARACIONES', 'VENTAS', 'ROLES', 'PERMISOS', 'ACTIVIDADES'];
     const iconos = {
-        'LOGIN': '🔐',
-        'USUARIOS': '👤',
-        'CLIENTES': '👥',
-        'MARCAS': '🏷️',
-        'MODELOS': '📱',
-        'INVENTARIO': '📦',
-        'REPARACIONES': '🔧',
-        'VENTAS': '💰',
-        'ROLES': '🛡️',
-        'PERMISOS': '🔑',
-        'ACTIVIDADES': '📊'
+        'LOGIN': '',
+        'USUARIOS': '',
+        'CLIENTES': '',
+        'MARCAS': '',
+        'MODELOS': '',
+        'INVENTARIO': '',
+        'REPARACIONES': '',
+        'VENTAS': '',
+        'ROLES': '',
+        'PERMISOS': '',
+        'ACTIVIDADES': ''
     };
     
     let datosOrganizados = [];
@@ -223,7 +223,7 @@ const datatable = new DataTable('#TableActividades', {
             width: '10%',
             render: (data, type, row, meta) => {
                 if (row.esSeparador) return '';
-                // ACCIONES EXTENDIDAS PARA TU PROYECTO
+        
                 const acciones = {
                     'CREAR': '<span class="badge bg-success">CREAR</span>',
                     'ACTUALIZAR': '<span class="badge bg-warning text-dark">ACTUALIZAR</span>',

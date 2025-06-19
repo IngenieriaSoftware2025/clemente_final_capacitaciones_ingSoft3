@@ -13,7 +13,7 @@ const BtnBuscarUsuarios = document.getElementById('BtnBuscarUsuarios');
 const seccionTabla = document.getElementById('seccionTabla');
 const SelectRol = document.getElementById('id_rol'); 
 
-// Cargar roles en el dropdown
+
 const CargarRoles = async () => {
     const url = `/clemente_final_capacitaciones_ingSoft3/registro/obtenerRolesAPI`;
     const config = {

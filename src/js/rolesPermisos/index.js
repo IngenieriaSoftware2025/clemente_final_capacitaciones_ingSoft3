@@ -399,13 +399,13 @@ const EliminarAsignacion = async (e) => {
     }
 }
 
-// Cargar datos al inicio
+
 CargarRoles();
 CargarPermisos();
 CargarUsuarios();
 BuscarAsignaciones();
 
-// Event listeners
+
 datatable.on('click', '.eliminar', EliminarAsignacion);
 datatable.on('click', '.modificar', llenarFormulario);
 FormRolesPermisos.addEventListener('submit', GuardarAsignacion);

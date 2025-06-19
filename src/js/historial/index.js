@@ -141,10 +141,10 @@ const exportarReporte = async () => {
         const resultado = await response.json();
         
         if (resultado.codigo === 1 && resultado.data) {
-            // Convertir datos a CSV
+      
             const csvContent = convertirACSV(resultado.data);
             
-            // Crear y descargar archivo
+ 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url_objeto = URL.createObjectURL(blob);
@@ -175,23 +175,22 @@ const exportarReporte = async () => {
     }
 };
 
-// FUNCIÓN PARA CONVERTIR DATOS A CSV
 const convertirACSV = (data) => {
     if (!data || data.length === 0) return '';
     
     const headers = ['Fecha', 'Usuario', 'Ruta', 'Descripción', 'Ejecución'];
     const csvRows = [];
     
-    // Agregar encabezados
+
     csvRows.push(headers.join(','));
     
-    // Agregar datos
+  
     data.forEach(row => {
         const valores = [
             row.fecha || '',
             row.usuario || '',
             row.ruta || '',
-            (row.descripcion || '').replace(/,/g, ';'), // Reemplazar comas para evitar problemas en CSV
+            (row.descripcion || '').replace(/,/g, ';'), 
             row.ejecucion || ''
         ];
         csvRows.push(valores.join(','));
@@ -200,7 +199,7 @@ const convertirACSV = (data) => {
     return csvRows.join('\n');
 };
 
-// CONFIGURACIÓN DE DATATABLES
+
 const datatable = new DataTable('#TableHistorialActividades', {
     dom: `
         <"row mt-3 justify-content-between" 
@@ -216,7 +215,7 @@ const datatable = new DataTable('#TableHistorialActividades', {
     `,
     language: lenguaje,
     data: [],
-    order: [[0, 'desc']], // Ordenar por fecha descendente
+    order: [[0, 'desc']], 
     columns: [
         {
             title: 'No.',
@@ -305,23 +304,23 @@ const datatable = new DataTable('#TableHistorialActividades', {
     ]
 });
 
-// EVENT LISTENERS
+
 BtnBuscar.addEventListener('click', buscarActividades);
 BtnLimpiarFiltros.addEventListener('click', limpiarFiltros);
 
-// Filtros automáticos cuando cambian los valores
+
 filtroUsuario.addEventListener('change', buscarActividades);
 filtroRuta.addEventListener('change', buscarActividades);
 fechaInicio.addEventListener('change', buscarActividades);
 fechaFin.addEventListener('change', buscarActividades);
 
-// INICIALIZACIÓN
+
 document.addEventListener('DOMContentLoaded', () => {
     cargarUsuarios();
     cargarRutas();
     buscarActividades();
     
-    // Establecer fecha por defecto (últimos 30 días)
+
     const hoy = new Date();
     const hace30Dias = new Date();
     hace30Dias.setDate(hoy.getDate() - 30);

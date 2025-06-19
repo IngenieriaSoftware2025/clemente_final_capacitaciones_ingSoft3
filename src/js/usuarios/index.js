@@ -4,14 +4,14 @@ import { validarFormulario } from '../funciones';
 import DataTable from "datatables.net-bs5";
 import { lenguaje } from "../lenguaje";
 
-// ELEMENTOS DEL DOM
+
 const FormUsuarios = document.getElementById('FormUsuarios');
 const BtnGuardar = document.getElementById('BtnGuardar');
 const BtnModificar = document.getElementById('BtnModificar');
 const BtnLimpiar = document.getElementById('BtnLimpiar');
 const BtnBuscar = document.getElementById('BtnBuscar');
 
-// CAMPOS DEL FORMULARIO
+
 const usuario_id = document.getElementById('usuario_id');
 const usuario_nom1 = document.getElementById('usuario_nom1');
 const usuario_nom2 = document.getElementById('usuario_nom2');
@@ -25,7 +25,7 @@ const usuario_contra = document.getElementById('usuario_contra');
 const confirmar_contra = document.getElementById('confirmar_contra');
 const usuario_fotografia = document.getElementById('usuario_fotografia');
 
-// URLs DE LAS APIS
+
 const urls = {
     guardar: '/clemente_final_capacitaciones_ingSoft3/API/usuarios/guardar',
     buscar: '/clemente_final_capacitaciones_ingSoft3/API/usuarios/buscar',
@@ -33,7 +33,7 @@ const urls = {
     eliminar: '/clemente_final_capacitaciones_ingSoft3/API/usuarios/eliminar'
 };
 
-// FUNCIÓN PARA GUARDAR USUARIO
+
 const GuardarUsuario = async (event) => {
     event.preventDefault();
     BtnGuardar.disabled = true;
@@ -50,7 +50,6 @@ const GuardarUsuario = async (event) => {
         return;
     }
 
-    // Validar que las contraseñas coincidan
     if (usuario_contra.value !== confirmar_contra.value) {
         Swal.fire({
             position: "center",
@@ -63,7 +62,6 @@ const GuardarUsuario = async (event) => {
         return;
     }
 
-    // Validar longitud de contraseña
     if (usuario_contra.value.length < 8) {
         Swal.fire({
             position: "center",
@@ -122,7 +120,7 @@ const GuardarUsuario = async (event) => {
     BtnGuardar.disabled = false;
 };
 
-// FUNCIÓN PARA BUSCAR USUARIOS
+
 const BuscarUsuarios = async () => {
     try {
         const response = await fetch(urls.buscar);
@@ -148,7 +146,6 @@ const BuscarUsuarios = async () => {
     }
 };
 
-// FUNCIÓN PARA MODIFICAR USUARIO
 const ModificarUsuario = async (event) => {
     event.preventDefault();
     BtnModificar.disabled = true;
@@ -211,7 +208,7 @@ const ModificarUsuario = async (event) => {
     BtnModificar.disabled = false;
 };
 
-// FUNCIÓN PARA ELIMINAR USUARIO
+
 const EliminarUsuario = async (event) => {
     const id = event.currentTarget.dataset.id;
     
@@ -258,7 +255,6 @@ const EliminarUsuario = async (event) => {
     }
 };
 
-// FUNCIÓN PARA LLENAR FORMULARIO PARA MODIFICAR
 const llenarFormulario = (event) => {
     const btn = event.currentTarget;
     const data = btn.dataset;
@@ -273,34 +269,34 @@ const llenarFormulario = (event) => {
     usuario_direc.value = data.direc;
     usuario_correo.value = data.correo;
 
-    // Ocultar campos de contraseña en modo edición
+
     usuario_contra.parentElement.style.display = 'none';
     confirmar_contra.parentElement.style.display = 'none';
 
-    // Cambiar botones
+
     BtnGuardar.style.display = 'none';
     BtnModificar.style.display = 'inline-block';
     BtnModificar.classList.remove('d-none');
 
-    // Scroll al formulario
+  
     FormUsuarios.scrollIntoView({ behavior: 'smooth' });
 };
 
-// FUNCIÓN PARA LIMPIAR FORMULARIO
+
 const limpiarFormulario = () => {
     FormUsuarios.reset();
     usuario_id.value = '';
     
-    // Mostrar campos de contraseña
+
     usuario_contra.parentElement.style.display = 'block';
     confirmar_contra.parentElement.style.display = 'block';
     
-    // Restaurar botones
+
     BtnGuardar.style.display = 'inline-block';
     BtnModificar.style.display = 'none';
     BtnModificar.classList.add('d-none');
     
-    // Limpiar validaciones
+
     FormUsuarios.classList.remove('was-validated');
     const inputs = FormUsuarios.querySelectorAll('.form-control');
     inputs.forEach(input => {
@@ -308,7 +304,7 @@ const limpiarFormulario = () => {
     });
 };
 
-// CONFIGURACIÓN DE DATATABLES
+
 const datatable = new DataTable('#TableUsuarios', {
     dom: `
         <"row mt-3 justify-content-between" 
@@ -426,7 +422,7 @@ const datatable = new DataTable('#TableUsuarios', {
     ]
 });
 
-// FUNCIÓN PARA MOSTRAR IMAGEN COMPLETA
+
 window.mostrarImagenCompleta = (src) => {
     Swal.fire({
         imageUrl: src,
@@ -438,7 +434,7 @@ window.mostrarImagenCompleta = (src) => {
     });
 };
 
-// VALIDACIONES EN TIEMPO REAL
+
 usuario_dpi.addEventListener('input', (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
     if (e.target.value.length > 13) {
@@ -453,7 +449,7 @@ usuario_tel.addEventListener('input', (e) => {
     }
 });
 
-// Validar email en tiempo real
+
 usuario_correo.addEventListener('blur', (e) => {
     const email = e.target.value;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -469,7 +465,6 @@ usuario_correo.addEventListener('blur', (e) => {
     }
 });
 
-// Validar contraseñas coinciden
 confirmar_contra.addEventListener('input', (e) => {
     if (usuario_contra.value !== e.target.value) {
         e.target.classList.add('is-invalid');
@@ -479,17 +474,17 @@ confirmar_contra.addEventListener('input', (e) => {
     }
 });
 
-// EVENT LISTENERS
+
 FormUsuarios.addEventListener('submit', GuardarUsuario);
 BtnModificar.addEventListener('click', ModificarUsuario);
 BtnLimpiar.addEventListener('click', limpiarFormulario);
 BtnBuscar.addEventListener('click', BuscarUsuarios);
 
-// Event delegation para botones de la tabla
+
 datatable.on('click', '.eliminar', EliminarUsuario);
 datatable.on('click', '.modificar', llenarFormulario);
 
-// INICIALIZACIÓN
+
 document.addEventListener('DOMContentLoaded', () => {
     BuscarUsuarios();
     

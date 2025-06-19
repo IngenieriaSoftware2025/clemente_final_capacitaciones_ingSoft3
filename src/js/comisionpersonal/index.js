@@ -30,7 +30,7 @@ const GuardarAsignacion = async (event) => {
     }
 
     const body = new FormData(FormComisionPersonal);
-    body.append('comision_personal_usuario_asigno', 1); // ID del usuario actual
+    body.append('comision_personal_usuario_asigno', 1); 
     
     const url = '/clemente_final_capacitaciones_ingSoft3/comisionpersonal/guardarAPI';
     const config = {
@@ -54,7 +54,7 @@ const GuardarAsignacion = async (event) => {
 
             limpiarTodo();
             BuscarAsignaciones();
-            CargarUsuarios(); // Recargar usuarios disponibles
+            CargarUsuarios(); 
         } else {
             await Swal.fire({
                 position: "center",
@@ -307,7 +307,7 @@ const EliminarAsignacion = async (e) => {
                 });
                 
                 BuscarAsignaciones();
-                CargarUsuarios(); // Recargar usuarios disponibles
+                CargarUsuarios(); 
             } else {
                 await Swal.fire({
                     position: "center",
@@ -399,13 +399,13 @@ const limpiarTodo = () => {
     BtnModificar.classList.add('d-none');
 }
 
-// Event Listeners
+
 FormComisionPersonal.addEventListener('submit', GuardarAsignacion);
 BtnLimpiar.addEventListener('click', limpiarTodo);
 BtnBuscar.addEventListener('click', BuscarAsignaciones);
 BtnPersonalDisponible.addEventListener('click', mostrarPersonalDisponible);
 
-// Inicializar
+
 CargarComisiones();
 CargarUsuarios();
 BuscarAsignaciones();

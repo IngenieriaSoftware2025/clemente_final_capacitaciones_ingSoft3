@@ -397,7 +397,7 @@ const limpiarTodo = () => {
     BtnModificar.classList.add('d-none');
 }
 
-// Event Listeners
+
 document.getElementById('asignacion_app_id').addEventListener('change', (e) => {
     if (e.target.value) {
         CargarPermisos(e.target.value);
@@ -415,7 +415,7 @@ BtnLimpiar.addEventListener('click', limpiarTodo);
 BtnBuscar.addEventListener('click', BuscarAsignaciones);
 BtnVerPermisos.addEventListener('click', mostrarPermisosUsuario);
 
-// Inicializar
+
 CargarUsuarios();
 CargarAplicaciones();
 BuscarAsignaciones();

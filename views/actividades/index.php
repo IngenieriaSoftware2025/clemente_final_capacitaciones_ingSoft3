@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <!-- Información del Sistema -->
+   
     <div class="row mb-4 justify-content-center">
         <div class="col-lg-10">
             <div class="alert alert-info">
@@ -85,7 +85,7 @@
         </div>
     </div>
 
-    <!-- Tabla de Actividades -->
+   
     <div class="row justify-content-center mt-5" id="seccionTabla" style="display: none;">
         <div class="col-12 d-flex justify-content-center">
             <div class="card shadow-lg border-primary rounded-4" style="width: 98%;">
