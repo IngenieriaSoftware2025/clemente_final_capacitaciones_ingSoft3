@@ -11,7 +11,7 @@ module.exports = {
     "js/asignacionpermisos/index": "./src/js/asignacionpermisos/index.js",
     "js/comisiones/index": "./src/js/comisiones/index.js",
     "js/comisionpersonal/index": "./src/js/comisionpersonal/index.js",
-    // "js/historial/index": "./src/js/historial/index.js",
+    "js/historial/index": "./src/js/historial/index.js",
     "js/estadisticas/index": "./src/js/estadisticas/index.js",
     "js/mapas/index": "./src/js/mapas/index.js",
     "js/permisos/index": "./src/js/mapas/index.js",
