@@ -7,7 +7,7 @@
     <script src="build/js/app.js"></script>
     <link rel="shortcut icon" href="<?= asset('images/cit.png') ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?= asset('build/styles.css') ?>">
-    <title>proyecto</title>
+    <title>PEREZ COMISIONES</title>
     <style>
         .nav-select {
             background: rgba(37, 50, 83, 0.9);
@@ -40,81 +40,54 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg,rgb(152, 65, 158) 0%,rgb(37, 53, 117) 100%);">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg,rgb(114, 70, 196) 0%,rgb(49, 22, 98) 100%);">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a class="navbar-brand" href="/clemente_final_capacitaciones_ingSoft3/inicio">
-                <img src="<?= asset('./images/celular.png') ?>" width="35px'" alt="cit">
-                Inicio
+                <img src="<?= asset('./images/cit.png') ?>" width="35px'" alt="cit">
+                PEREZ COMISIONES
             </a>
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="margin: 0;">
 
-
+                    <!-- GESTIÓN DE USUARIOS -->
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                            <option value="">Autenticación</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/login"><i class="bi bi-door-open"></i> Login</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/registro"><i class="bi bi-person"></i> Registro</option>
+                            <option value="">👥 Usuarios</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/usuarios">Gestión de Usuarios</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/aplicacion">Aplicaciones</option>
                         </select>
                     </li>
 
-
+                    <!-- COMISIONES -->
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                            <option value="">Catálogos</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/marcas"><i class="bi bi-people"></i> Marcas</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/modelos"><i class="bi bi-phone"></i> Modelos</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/clientes"><i class="bi bi-person-vcard"></i> Clientes</option>
+                            <option value="">📋 Comisiones</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/comisiones">Gestión de Comisiones</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/comisionpersonal">Asignación de Personal</option>
                         </select>
                     </li>
 
-
+                    <!-- PERMISOS Y ROLES -->
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                            <option value="">Operaciones</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/inventario"><i class="bi bi-box-seam"></i> Inventario</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/reparaciones"><i class="bi bi-tools"></i> Reparaciones</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/ventas"><i class="bi bi-tools"></i> Ventas</option>
-                            
+                            <option value="">🛡️ Seguridad</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/permisos">Gestión de Permisos</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/asignacionpermisos">Asignación de Permisos</option>
                         </select>
                     </li>
 
+                    <!-- REPORTES Y ANÁLISIS -->
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                           <option value="">movimientos</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/actividades"><i class="bi bi-tools"></i> Rutas y Actividades</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/estadisticas"><i class="bi bi-tools"></i> Estadisticas</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/mapas"><i class="bi bi-tools"></i> Ubicacion</option>
+                            <option value="">📊 Reportes</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/actividades">Historial de Actividades</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/estadisticas">Estadísticas</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/mapa">Ubicación en Mapa</option>
                         </select>
                     </li>
-
-
-                    <li class="nav-item">
-                        <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
-                            <option value="">Administración</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/roles"><i class="bi bi-shield-check"></i> Roles</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/permisos"><i class="bi bi-key"></i> Permisos</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/rolesPermisos"><i class="bi bi-shield-lock"> </i>Asignacion Permisos</option>
-                        </select>
-                    </li>
-
-
-
-
-
-                    <div class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="bi bi-gear me-2"></i>Dropdown
-                        </a>
-                        <ul class="dropdown-menu  dropdown-menu-dark " id="dropwdownRevision" style="margin: 0;">
-                            <li>
-                                <a class="dropdown-item nav-link text-white " href="/aplicaciones/nueva"><i class="ms-lg-0 ms-2 bi bi-plus-circle me-2"></i>Subitem</a>
-                            </li>
-                        </ul>
-                    </div>
 
                 </ul>
 
@@ -125,13 +98,13 @@
                     <div class="d-flex align-items-center me-3">
                         <span class="text-white me-3">
                             <i class="bi bi-person-circle me-1"></i>
-                            <?= $_SESSION['user'] ?> (<?= $_SESSION['rol'] ?>)
+                            <?= $_SESSION['user'] ?> (ID: <?= $_SESSION['usuario_id'] ?>)
                         </span>
                     </div>
                     <div class="col-lg-2 d-grid mb-lg-0 mb-2">
                         <div class="d-flex gap-2">
-                            <a href="/clemente_final_capacitaciones_ingSoft3/login" class="btn btn-danger">
-                                <i class="bi bi-box-arrow-right"></i>Cerrar Sesion
+                            <a href="/clemente_final_capacitaciones_ingSoft3/logout" class="btn btn-danger">
+                                <i class="bi bi-box-arrow-right"></i>Cerrar Sesión
                             </a>
                         </div>
                     </div>
@@ -158,12 +131,11 @@
         <div class="row justify-content-center text-center">
             <div class="col-12">
                 <p style="font-size:xx-small; font-weight: bold;">
-                    Comando de Informática y Tecnología, <?= date('Y') ?> &copy;
+                    Sistema PEREZ COMISIONES, <?= date('Y') ?> &copy;
                 </p>
             </div>
         </div>
     </div>
-
 
 </body>
 
