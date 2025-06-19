@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
+
 const llenarFormulario = (event) => {
     const datos = event.currentTarget.dataset;
 
@@ -56,7 +53,7 @@ const ModificarPermiso = async (event) => {
         body
     }
 
-    try {
+   
         const respuesta = await fetch(url, config);
         const datos = await respuesta.json();
         const { codigo, mensaje } = datos
@@ -79,10 +76,15 @@ const ModificarPermiso = async (event) => {
                 title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
-<<<<<<< HEAD
-=======
-=======
-import Swal from "sweetalert2";
+
+
+            }
+            )
+        }
+   
+}
+
+        
 //import { Dropdown } from "bootstrap";
 
 
@@ -125,16 +127,12 @@ const GuardarPermiso = async (event) => {
                 icon: "error",
                 title: "Error",
                 text: datos.mensaje,
->>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
+
             });
         }
 
     } catch (error) {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
+
         console.log(error)
     }
     BtnModificar.disabled = false;
@@ -223,19 +221,17 @@ document.addEventListener('DOMContentLoaded', () => {
             EliminarPermiso(id);
         }
     });
-<<<<<<< HEAD
+
 });
-=======
-});
-=======
+
         console.log(error);
         Swal.fire({
             icon: "error",
             title: "Error",
             text: "No se pudo conectar con el servidor",
         });
-    }
-}
+    
+
 
 //FUNCIÓN PARA BUSCAR PERMISOS
 const BuscarPermisos = async () => {
@@ -313,7 +309,7 @@ window.EditarPermiso = (id, nombre, descripcion) => {
 }
 
 //FUNCIÓN PARA MODIFICAR PERMISO
-const ModificarPermiso = async () => {
+const ModificarPermiso1 = async () => {
     const formData = new FormData(FormPermisos);
     
     try {
@@ -381,5 +377,4 @@ FormPermisos.addEventListener('submit', GuardarPermiso);
 BtnLimpiar.addEventListener('click', LimpiarFormulario);
 BtnModificar.addEventListener('click', ModificarPermiso);
 BtnBuscar.addEventListener('click', MostrarTabla);
->>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
+

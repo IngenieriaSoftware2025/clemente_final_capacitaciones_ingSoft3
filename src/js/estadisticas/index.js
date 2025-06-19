@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
 
-import { Dropdown } from "bootstrap";
+
 
 // VARIABLES GLOBALES
 let graficos = {};
@@ -613,11 +609,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Actualizar datos cada 5 minutos
     setInterval(cargarTodosLosDatos, 300000);
-<<<<<<< HEAD
+
 });
-=======
-});
-=======
+
+
 import { Dropdown } from "bootstrap";
 import Swal from "sweetalert2";
 import { Chart } from "chart.js/auto";
@@ -899,5 +894,4 @@ const BuscarEstadisticas = async () => {
 
 
 BuscarEstadisticas();
->>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
+
