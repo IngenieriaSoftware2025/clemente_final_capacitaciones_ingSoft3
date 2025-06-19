@@ -96,4 +96,16 @@ $router->get('/API/historial/buscarActividadPorDia', [HistorialActController::cl
 $router->get('/API/historial/buscarActividadPorModulo', [HistorialActController::class, 'buscarActividadPorModuloAPI']);
 
 
+
+
+// Vistas
+$router->get('/usuarios', [UsuariosController::class, 'renderizarPagina']);
+$router->get('/aplicacion', [AplicacionController::class, 'renderizarPagina']);
+
+
+$router->post('/API/usuarios/guardar', [UsuariosController::class, 'guardarAPI']);
+$router->get('/API/usuarios/buscar', [UsuariosController::class, 'buscarAPI']);
+$router->post('/API/usuarios/modificar', [UsuariosController::class, 'modificarAPI']);
+$router->get('/API/usuarios/eliminar', [UsuariosController::class, 'EliminarAPI']);
+
 $router->comprobarRutas(); 

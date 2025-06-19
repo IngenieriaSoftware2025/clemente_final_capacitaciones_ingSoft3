@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
+
 <div class="container mt-4">
     <div class="row mb-4">
         <div class="col-12">
@@ -111,9 +108,6 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" id="TablePermisos">
                         </table>
-<<<<<<< HEAD
-=======
-=======
 <!DOCTYPE html>
 <html lang="es">
 
@@ -205,28 +199,19 @@
                                 </tbody>
                             </table>
                         </div>
->>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<<<<<<< HEAD
 </div>
-
 <script src="<?= asset('build/js/permisos/index.js') ?>"></script>
-=======
-<<<<<<< HEAD
 </div>
-
 <script src="<?= asset('build/js/permisos/index.js') ?>"></script>
-=======
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= asset('build/js/permisos/index.js') ?>"></script>
 </body>
 
 </html>
->>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
+

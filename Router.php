@@ -24,8 +24,6 @@ class Router
 
     public function comprobarRutas()
     {
-
-
         $currentUrl = $_SERVER['REQUEST_URI'] ? str_replace("?" . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']) : $this->base .'/';
         $method = $_SERVER['REQUEST_METHOD'];
         // debuguear($currentUrl);
@@ -35,7 +33,6 @@ class Router
             $fn = $this->postRoutes[$currentUrl] ?? null;
         }
         
-
         if ( $fn ) {
             // Call user fn va a llamar una función cuando no sabemos cual sera
             call_user_func($fn, $this); // This es para pasar argumentos
@@ -51,23 +48,8 @@ class Router
         }
     }
 
-<<<<<<< HEAD
     public function render($view, $datos = [], $layout = "layouts/layout")
-=======
-<<<<<<< HEAD
-    public function render($view, $datos = [], $layout = "layouts/layout")
-=======
-
-
-
-
-
-    /////////////////////RUTA
-    public function render($view, $datos = [], $layout = "layout/layout")
->>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
     {
-
         // Leer lo que le pasamos  a la vista
         foreach ($datos as $key => $value) {
             $$key = $value;  // Doble signo de dolar significa: variable variable, básicamente nuestra variable sigue siendo la original, pero al asignarla a otra no la reescribe, mantiene su valor, de esta forma el nombre de la variable se asigna dinamicamente
@@ -79,13 +61,6 @@ class Router
         include_once __DIR__ . "/views/$view.php";
         $contenido = ob_get_clean(); // Limpia el Buffer
         include_once __DIR__ . "/views/$layout.php";
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-           /////////////////////RUTA
->>>>>>> d2a8c3cdb20f7cff9ab25a7a1b6a528ae532b3db
->>>>>>> 50ced8adf869d8399e84c958de3886b846d5d675
     }
 
     public function load($view, $datos = []){
@@ -102,10 +77,8 @@ class Router
     }
 
     public function printPDF($ruta){
-
         header("Content-type: application/pdf");
         header("Content-Disposition: inline; filename=filename.pdf");
         @readfile(__DIR__ . '/storage/' . $ruta );
-    
     }
 }
