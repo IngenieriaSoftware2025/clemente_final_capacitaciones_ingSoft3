@@ -83,7 +83,7 @@
                     <li class="nav-item">
                         <select class="nav-select" onchange="if(this.value) window.location.href=this.value">
                             <option value="">📊 Reportes</option>
-                            <option value="/clemente_final_capacitaciones_ingSoft3/actividades">Historial de Actividades</option>
+                            <option value="/clemente_final_capacitaciones_ingSoft3/historial">Historial de Actividades</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/estadisticas">Estadísticas</option>
                             <option value="/clemente_final_capacitaciones_ingSoft3/mapa">Ubicación en Mapa</option>
                         </select>
