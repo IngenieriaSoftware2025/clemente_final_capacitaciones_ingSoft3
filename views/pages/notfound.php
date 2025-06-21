@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-danger text-white text-center" style="background: linear-gradient(135deg,rgb(220, 53, 69) 0%,rgb(176, 42, 55) 100%);">
-                    <h5 class="mb-1">¡Sistema PEREZ COMISIONES!</h5>
+                <div class="card-header bg-danger text-white text-center" style="background: linear-gradient(135deg,rgb(114, 70, 196) 0%,rgb(49, 22, 98) 100%);">
+                    <h5 class="mb-1">¡Sistema PEREZ CAPACITACIONES!</h5>
                     <h4 class="mb-0">PÁGINA NO ENCONTRADA</h4>
                 </div>
                 <div class="card-body text-center">

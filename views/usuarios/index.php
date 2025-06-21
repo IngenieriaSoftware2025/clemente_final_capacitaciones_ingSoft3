@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header bg-primary text-white text-center" style="background: linear-gradient(135deg,rgb(114, 70, 196) 0%,rgb(49, 22, 98) 100%);">
-                    <h5 class="mb-1">¡Sistema de Gestión PEREZ COMISIONES!</h5>
+                    <h5 class="mb-1">¡Sistema de Gestión PEREZ CAPACITACIONES!</h5>
                     <h4 class="mb-0">GESTIÓN DE USUARIOS</h4>
                 </div>
                 <div class="card-body">

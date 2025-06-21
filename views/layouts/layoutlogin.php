@@ -6,7 +6,7 @@
     <script src="build/js/app.js"></script>
     <link rel="shortcut icon" href="<?= asset('images/cit.png') ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?= asset('build/styles.css') ?>">
-    <title>PEREZ COMISIONES - Login</title>
+    <title>PEREZ CAPACITACIONES - Login</title>
 </head>
 <body>
 
@@ -21,7 +21,7 @@
         <div class="row justify-content-center text-center">
             <div class="col-12">
                 <p style="font-size:xx-small; font-weight: bold;">
-                        Sistema PEREZ COMISIONES, <?= date('Y') ?> &copy;
+                        Sistema PEREZ CAPACITACIONES, <?= date('Y') ?> &copy;
                 </p>
             </div>
         </div>

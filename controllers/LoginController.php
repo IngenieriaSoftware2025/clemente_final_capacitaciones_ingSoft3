@@ -11,7 +11,7 @@ class LoginController extends ActiveRecord
 {
     public static function renderizarPagina(Router $router)
     {
-        $router->render('login/index', [], 'layout/layoutlogin');
+        $router->render('login/index', [], 'layouts/layoutlogin');
     }
 
     public static function login()
@@ -41,7 +41,7 @@ class LoginController extends ActiveRecord
                     $_SESSION['dpi'] = $dpi;
                     $_SESSION['usuario_id'] = $usuarioId;
 
-                    // Asignar rol básico por defecto (puedes modificar esto según tu lógica de roles)
+                   
                     $_SESSION['rol'] = 'Usuario Básico';
 
                     RutasActividadesController::registrarRutaActividad(

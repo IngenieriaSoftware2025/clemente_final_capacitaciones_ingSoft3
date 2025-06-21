@@ -9,7 +9,6 @@ use Model\Aplicacion;
 
 class AplicacionController extends ActiveRecord
 {
-
     public static function renderizarPagina(Router $router)
     {
         $router->render('aplicacion/index', []);
@@ -17,116 +16,74 @@ class AplicacionController extends ActiveRecord
 
     public static function guardarAPI()
     {
-        getHeadersApi();
-    
+        header('Content-Type: application/json');
+
         try {
+            // NOMBRE LARGO OBLIGATORIO
             $_POST['app_nombre_largo'] = ucwords(strtolower(trim(htmlspecialchars($_POST['app_nombre_largo']))));
-            
-            $cantidad_largo = strlen($_POST['app_nombre_largo']);
-            
-            if ($cantidad_largo < 2) {
+            $cantidad_nombre_largo = strlen($_POST['app_nombre_largo']);
+            if ($cantidad_nombre_largo < 5) {
                 http_response_code(400);
                 echo json_encode([
                     'codigo' => 0,
-                    'mensaje' => 'Nombre largo debe de tener mas de 1 caracteres'
-                ]);
-                exit;
-            }
-            
-            if ($cantidad_largo > 250) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'Nombre largo no puede exceder los 250 caracteres'
-                ]);
-                exit;
-            }
-            
-            $_POST['app_nombre_medium'] = ucwords(strtolower(trim(htmlspecialchars($_POST['app_nombre_medium']))));
-            
-            $cantidad_medium = strlen($_POST['app_nombre_medium']);
-            
-            if ($cantidad_medium < 2) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'Nombre mediano debe de tener mas de 1 caracteres'
-                ]);
-                exit;
-            }
-            
-            if ($cantidad_medium > 150) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'Nombre mediano no puede exceder los 150 caracteres'
-                ]);
-                exit;
-            }
-            
-            $_POST['app_nombre_corto'] = strtoupper(trim(htmlspecialchars($_POST['app_nombre_corto'])));
-            $cantidad_corto = strlen($_POST['app_nombre_corto']);
-            
-            if ($cantidad_corto < 2) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'Nombre corto debe de tener mas de 1 caracteres'
-                ]);
-                exit;
-            }
-            
-            if ($cantidad_corto > 50) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'Nombre corto no puede exceder los 50 caracteres'
+                    'mensaje' => 'El nombre largo debe tener más de 4 caracteres'
                 ]);
                 exit;
             }
 
-            $verificarNombreCortoExistente = self::fetchArray("SELECT app_id FROM avpc_aplicacion WHERE app_nombre_corto = '{$_POST['app_nombre_corto']}' AND app_situacion = 1");
-
-            if (count($verificarNombreCortoExistente) > 0) {
+            // NOMBRE CORTO OBLIGATORIO
+            $_POST['app_nombre_corto'] = ucwords(strtolower(trim(htmlspecialchars($_POST['app_nombre_corto']))));
+            $cantidad_nombre_corto = strlen($_POST['app_nombre_corto']);
+            if ($cantidad_nombre_corto < 2) {
                 http_response_code(400);
                 echo json_encode([
                     'codigo' => 0,
-                    'mensaje' => 'Ya existe una aplicación con este nombre corto'
+                    'mensaje' => 'El nombre corto debe tener más de 1 caracter'
                 ]);
                 exit;
             }
 
+            // VERIFICAR NOMBRE LARGO EXISTENTE
             $verificarNombreLargoExistente = self::fetchArray("SELECT app_id FROM avpc_aplicacion WHERE app_nombre_largo = '{$_POST['app_nombre_largo']}' AND app_situacion = 1");
-
             if (count($verificarNombreLargoExistente) > 0) {
                 http_response_code(400);
                 echo json_encode([
                     'codigo' => 0,
-                    'mensaje' => 'Ya existe una aplicación con este nombre largo'
+                    'mensaje' => 'Ya existe una aplicación registrada con este nombre largo'
                 ]);
                 exit;
             }
-            
+
+            // VERIFICAR NOMBRE CORTO EXISTENTE
+            $verificarNombreCortoExistente = self::fetchArray("SELECT app_id FROM avpc_aplicacion WHERE app_nombre_corto = '{$_POST['app_nombre_corto']}' AND app_situacion = 1");
+            if (count($verificarNombreCortoExistente) > 0) {
+                http_response_code(400);
+                echo json_encode([
+                    'codigo' => 0,
+                    'mensaje' => 'Ya existe una aplicación registrada con este nombre corto'
+                ]);
+                exit;
+            }
+
+            // ESTABLECER FECHA DE CREACIÓN AUTOMÁTICA
             $_POST['app_fecha_creacion'] = '';
-            $_POST['app_situacion'] = 1;
-            
+
             $aplicacion = new Aplicacion($_POST);
             $resultado = $aplicacion->crear();
 
-            if($resultado['resultado'] == 1){
+            if ($resultado['resultado'] == 1) {
                 http_response_code(200);
                 echo json_encode([
                     'codigo' => 1,
-                    'mensaje' => 'Aplicacion registrada correctamente',
+                    'mensaje' => 'Aplicación registrada correctamente',
                 ]);
-                exit;
             } else {
                 http_response_code(500);
                 echo json_encode([
                     'codigo' => 0,
-                    'mensaje' => 'Error en registrar la aplicacion',
+                    'mensaje' => 'Error al registrar la aplicación',
+                    'detalle' => 'Error en la base de datos'
                 ]);
-                exit;
             }
             
         } catch (Exception $e) {
@@ -134,10 +91,10 @@ class AplicacionController extends ActiveRecord
             echo json_encode([
                 'codigo' => 0,
                 'mensaje' => 'Error interno del servidor',
-                'detalle' => $e->getMessage(),
+                'detalle' => $e->getMessage()
             ]);
-            exit;
         }
+        exit;
     }
 
     public static function buscarAPI()
@@ -145,7 +102,6 @@ class AplicacionController extends ActiveRecord
         try {
             $fecha_inicio = isset($_GET['fecha_inicio']) ? $_GET['fecha_inicio'] : null;
             $fecha_fin = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : null;
-            $nombre = isset($_GET['nombre']) ? $_GET['nombre'] : null;
 
             $condiciones = ["app_situacion = 1"];
 
@@ -155,10 +111,6 @@ class AplicacionController extends ActiveRecord
 
             if ($fecha_fin) {
                 $condiciones[] = "app_fecha_creacion <= '{$fecha_fin}'";
-            }
-
-            if ($nombre) {
-                $condiciones[] = "(app_nombre_largo LIKE '%{$nombre}%' OR app_nombre_medium LIKE '%{$nombre}%' OR app_nombre_corto LIKE '%{$nombre}%')";
             }
 
             $where = implode(" AND ", $condiciones);
@@ -184,286 +136,99 @@ class AplicacionController extends ActiveRecord
 
     public static function modificarAPI()
     {
-        getHeadersApi();
-
-        $id = $_POST['app_id'];
-        $_POST['app_nombre_largo'] = ucwords(strtolower(trim(htmlspecialchars($_POST['app_nombre_largo']))));
-
-        $cantidad_largo = strlen($_POST['app_nombre_largo']);
-
-        if ($cantidad_largo < 2) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Nombre largo debe de tener mas de 1 caracteres'
-            ]);
-            return;
-        }
-
-        if ($cantidad_largo > 250) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Nombre largo no puede exceder los 250 caracteres'
-            ]);
-            return;
-        }
-
-        $_POST['app_nombre_medium'] = ucwords(strtolower(trim(htmlspecialchars($_POST['app_nombre_medium']))));
-
-        $cantidad_medium = strlen($_POST['app_nombre_medium']);
-
-        if ($cantidad_medium < 2) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Nombre mediano debe de tener mas de 1 caracteres'
-            ]);
-            return;
-        }
-
-        if ($cantidad_medium > 150) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Nombre mediano no puede exceder los 150 caracteres'
-            ]);
-            return;
-        }
-
-        $_POST['app_nombre_corto'] = strtoupper(trim(htmlspecialchars($_POST['app_nombre_corto'])));
-        $cantidad_corto = strlen($_POST['app_nombre_corto']);
-
-        if ($cantidad_corto < 2) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Nombre corto debe de tener mas de 1 caracteres'
-            ]);
-            return;
-        }
-
-        if ($cantidad_corto > 50) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Nombre corto no puede exceder los 50 caracteres'
-            ]);
-            return;
-        }
+        header('Content-Type: application/json');
 
         try {
-            $verificarNombreCortoExistente = self::fetchArray("SELECT app_id FROM avpc_aplicacion WHERE app_nombre_corto = '{$_POST['app_nombre_corto']}' AND app_situacion = 1 AND app_id != {$id}");
+            $id = $_POST['app_id'];
 
-            if (count($verificarNombreCortoExistente) > 0) {
+            // NOMBRE LARGO OBLIGATORIO
+            $_POST['app_nombre_largo'] = ucwords(strtolower(trim(htmlspecialchars($_POST['app_nombre_largo']))));
+            $cantidad_nombre_largo = strlen($_POST['app_nombre_largo']);
+            if ($cantidad_nombre_largo < 5) {
                 http_response_code(400);
                 echo json_encode([
                     'codigo' => 0,
-                    'mensaje' => 'Ya existe otra aplicación con este nombre corto'
+                    'mensaje' => 'El nombre largo debe tener más de 4 caracteres'
                 ]);
-                return;
+                exit;
             }
 
-            $verificarNombreLargoExistente = self::fetchArray("SELECT app_id FROM avpc_aplicacion WHERE app_nombre_largo = '{$_POST['app_nombre_largo']}' AND app_situacion = 1 AND app_id != {$id}");
+            // NOMBRE CORTO OBLIGATORIO
+            $_POST['app_nombre_corto'] = ucwords(strtolower(trim(htmlspecialchars($_POST['app_nombre_corto']))));
+            $cantidad_nombre_corto = strlen($_POST['app_nombre_corto']);
+            if ($cantidad_nombre_corto < 2) {
+                http_response_code(400);
+                echo json_encode([
+                    'codigo' => 0,
+                    'mensaje' => 'El nombre corto debe tener más de 1 caracter'
+                ]);
+                exit;
+            }
 
+            // VERIFICAR NOMBRE LARGO EXISTENTE 
+            $verificarNombreLargoExistente = self::fetchArray("SELECT app_id FROM avpc_aplicacion WHERE app_nombre_largo = '{$_POST['app_nombre_largo']}' AND app_situacion = 1 AND app_id != {$id}");
             if (count($verificarNombreLargoExistente) > 0) {
                 http_response_code(400);
                 echo json_encode([
                     'codigo' => 0,
-                    'mensaje' => 'Ya existe otra aplicación con este nombre largo'
+                    'mensaje' => 'Ya existe otra aplicación registrada con este nombre largo'
                 ]);
-                return;
+                exit;
             }
 
-            $data = Aplicacion::find($id);
-            $data->sincronizar([
+            // VERIFICAR NOMBRE CORTO EXISTENTE 
+            $verificarNombreCortoExistente = self::fetchArray("SELECT app_id FROM avpc_aplicacion WHERE app_nombre_corto = '{$_POST['app_nombre_corto']}' AND app_situacion = 1 AND app_id != {$id}");
+            if (count($verificarNombreCortoExistente) > 0) {
+                http_response_code(400);
+                echo json_encode([
+                    'codigo' => 0,
+                    'mensaje' => 'Ya existe otra aplicación registrada con este nombre corto'
+                ]);
+                exit;
+            }
+
+            //ACTUALIZAR APLICACIÓN
+            $aplicacion = Aplicacion::find($id);
+            $aplicacion->sincronizar([
                 'app_nombre_largo' => $_POST['app_nombre_largo'],
-                'app_nombre_medium' => $_POST['app_nombre_medium'],
                 'app_nombre_corto' => $_POST['app_nombre_corto'],
                 'app_situacion' => 1
             ]);
-            $data->actualizar();
+
+            $resultado = $aplicacion->actualizar();
 
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'La informacion de la aplicacion ha sido modificada exitosamente'
+                'mensaje' => 'Aplicación modificada correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al guardar',
+                'mensaje' => 'Error al modificar la aplicación',
                 'detalle' => $e->getMessage(),
             ]);
         }
+        exit;
     }
 
-    public static function EliminarAPI()
+    public static function eliminarAPI()
     {
         try {
             $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
-
-            $verificarPermisos = self::fetchArray("SELECT permiso_id FROM avpc_permiso WHERE app_id = {$id} AND permiso_situacion = 1");
-
-            if (count($verificarPermisos) > 0) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'No se puede eliminar la aplicación porque tiene permisos asociados'
-                ]);
-                return;
-            }
-
-            $verificarAsignaciones = self::fetchArray("SELECT asignacion_id FROM avpc_asig_permisos WHERE asignacion_app_id = {$id} AND asignacion_situacion = 1");
-
-            if (count($verificarAsignaciones) > 0) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'No se puede eliminar la aplicación porque tiene asignaciones de permisos activas'
-                ]);
-                return;
-            }
-
-            $ejecutar = Aplicacion::EliminarAplicaciones($id);
+            Aplicacion::EliminarAplicacion($id);
 
             http_response_code(200);
             echo json_encode([
                 'codigo' => 1,
-                'mensaje' => 'El registro ha sido eliminado correctamente'
+                'mensaje' => 'La aplicación ha sido eliminada correctamente'
             ]);
         } catch (Exception $e) {
             http_response_code(400);
             echo json_encode([
                 'codigo' => 0,
-                'mensaje' => 'Error al Eliminar',
-                'detalle' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public static function buscarEstadisticasAPI()
-    {
-        try {
-            $sql = "SELECT 
-                        a.app_id,
-                        a.app_nombre_corto,
-                        a.app_nombre_largo,
-                        COUNT(DISTINCT p.permiso_id) as total_permisos,
-                        COUNT(DISTINCT ap.asignacion_id) as total_asignaciones,
-                        COUNT(DISTINCT ap.asignacion_usuario_id) as usuarios_con_permisos
-                    FROM avpc_aplicacion a
-                    LEFT JOIN avpc_permiso p ON a.app_id = p.app_id AND p.permiso_situacion = 1
-                    LEFT JOIN avpc_asig_permisos ap ON a.app_id = ap.asignacion_app_id AND ap.asignacion_situacion = 1
-                    WHERE a.app_situacion = 1
-                    GROUP BY a.app_id, a.app_nombre_corto, a.app_nombre_largo
-                    ORDER BY total_asignaciones DESC";
-            $data = self::fetchArray($sql);
-
-            http_response_code(200);
-            echo json_encode([
-                'codigo' => 1,
-                'mensaje' => 'Estadísticas de aplicaciones obtenidas correctamente',
-                'data' => $data
-            ]);
-
-        } catch (Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Error al obtener las estadísticas',
-                'detalle' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public static function buscarPermisosPorAplicacionAPI()
-    {
-        try {
-            $app_id = isset($_GET['app_id']) ? $_GET['app_id'] : null;
-
-            if (!$app_id) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'Debe especificar el ID de la aplicación'
-                ]);
-                return;
-            }
-
-            $sql = "SELECT 
-                        p.permiso_id,
-                        p.permiso_nombre,
-                        p.permiso_clave,
-                        p.permiso_tipo,
-                        p.permiso_desc,
-                        COUNT(ap.asignacion_id) as veces_asignado
-                    FROM avpc_permiso p
-                    LEFT JOIN avpc_asig_permisos ap ON p.permiso_id = ap.asignacion_permiso_id AND ap.asignacion_situacion = 1
-                    WHERE p.app_id = {$app_id} AND p.permiso_situacion = 1
-                    GROUP BY p.permiso_id, p.permiso_nombre, p.permiso_clave, p.permiso_tipo, p.permiso_desc
-                    ORDER BY veces_asignado DESC";
-            $data = self::fetchArray($sql);
-
-            http_response_code(200);
-            echo json_encode([
-                'codigo' => 1,
-                'mensaje' => 'Permisos de la aplicación obtenidos correctamente',
-                'data' => $data
-            ]);
-
-        } catch (Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Error al obtener los permisos de la aplicación',
-                'detalle' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public static function buscarUsuariosPorAplicacionAPI()
-    {
-        try {
-            $app_id = isset($_GET['app_id']) ? $_GET['app_id'] : null;
-
-            if (!$app_id) {
-                http_response_code(400);
-                echo json_encode([
-                    'codigo' => 0,
-                    'mensaje' => 'Debe especificar el ID de la aplicación'
-                ]);
-                return;
-            }
-
-            $sql = "SELECT DISTINCT
-                        u.usuario_id,
-                        u.usuario_nom1,
-                        u.usuario_ape1,
-                        u.usuario_correo,
-                        COUNT(ap.asignacion_id) as permisos_asignados
-                    FROM avpc_usuario u
-                    INNER JOIN avpc_asig_permisos ap ON u.usuario_id = ap.asignacion_usuario_id
-                    WHERE ap.asignacion_app_id = {$app_id} 
-                    AND ap.asignacion_situacion = 1 
-                    AND u.usuario_situacion = 1
-                    GROUP BY u.usuario_id, u.usuario_nom1, u.usuario_ape1, u.usuario_correo
-                    ORDER BY permisos_asignados DESC";
-            $data = self::fetchArray($sql);
-
-            http_response_code(200);
-            echo json_encode([
-                'codigo' => 1,
-                'mensaje' => 'Usuarios de la aplicación obtenidos correctamente',
-                'data' => $data
-            ]);
-
-        } catch (Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'codigo' => 0,
-                'mensaje' => 'Error al obtener los usuarios de la aplicación',
+                'mensaje' => 'Error al eliminar la aplicación',
                 'detalle' => $e->getMessage(),
             ]);
         }

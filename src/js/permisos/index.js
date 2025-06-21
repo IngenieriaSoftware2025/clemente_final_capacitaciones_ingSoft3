@@ -1,227 +1,380 @@
-// --- VARIABLES GLOBALES ---
-const FormPermisos = document.getElementById('FormPermisos');
+import Swal from "sweetalert2";
+import { validarFormulario } from '../funciones';
+import DataTable from "datatables.net-bs5";
+import { lenguaje } from "../lenguaje";
+
+const FormPermiso = document.getElementById('FormPermiso');
 const BtnGuardar = document.getElementById('BtnGuardar');
 const BtnModificar = document.getElementById('BtnModificar');
 const BtnLimpiar = document.getElementById('BtnLimpiar');
 const BtnBuscar = document.getElementById('BtnBuscar');
-const bodyPermisos = document.getElementById('bodyPermisos');
-const seccionTabla = document.getElementById('seccionTabla');
+const SelectUsuario = document.getElementById('usuario_id');
+const SelectAplicacion = document.getElementById('app_id');
 
-// --- FUNCIONES ---
-
-// Cargar usuarios en select
+// Cargar usuarios en el dropdown
 const CargarUsuarios = async () => {
+    const url = `/clemente_final_capacitaciones_ingSoft3/API/permisos/obtenerUsuarios`;
+    const config = {
+        method: 'GET'
+    }
+
     try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/permisos/buscarUsuarios');
+        const respuesta = await fetch(url, config);
         const datos = await respuesta.json();
+        const { codigo, data } = datos
 
-        if (datos.codigo == 1) {
-            const selectUsuario = document.getElementById('usuario_id');
-            const selectAsigno = document.getElementById('permiso_usuario_asigno');
-            selectUsuario.innerHTML = '<option value="">Seleccione un usuario</option>';
-            selectAsigno.innerHTML = '<option value="">Seleccione quién asigna</option>';
-
-            datos.data.forEach(usuario => {
-                const nombre = `${usuario.usuario_nom1} ${usuario.usuario_ape1}`;
-                const option = `<option value="${usuario.usuario_id}">${nombre}</option>`;
-                selectUsuario.innerHTML += option;
-                selectAsigno.innerHTML += option;
+        if (codigo == 1) {
+            SelectUsuario.innerHTML = '<option value="">Seleccione un usuario</option>';
+            data.forEach(usuario => {
+                SelectUsuario.innerHTML += `<option value="${usuario.usuario_id}">${usuario.usuario_nom1} ${usuario.usuario_nom2 || ''} ${usuario.usuario_ape1} ${usuario.usuario_ape2 || ''}</option>`;
             });
         }
-    } catch (error) {
-        console.error(error);
-        Swal.fire({ icon: "error", title: "Error", text: "No se pudieron cargar los usuarios." });
-    }
-};
 
-// Cargar aplicaciones en select
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// Cargar aplicaciones en el dropdown
 const CargarAplicaciones = async () => {
+    const url = `/clemente_final_capacitaciones_ingSoft3/API/permisos/obtenerAplicaciones`;
+    const config = {
+        method: 'GET'
+    }
+
     try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/permisos/buscarAplicaciones');
+        const respuesta = await fetch(url, config);
         const datos = await respuesta.json();
+        const { codigo, data } = datos
 
-        if (datos.codigo == 1) {
-            const select = document.getElementById('app_id');
-            select.innerHTML = '<option value="">Seleccione una aplicación</option>';
-
-            datos.data.forEach(app => {
-                select.innerHTML += `<option value="${app.app_id}">${app.app_nombre_corto}</option>`;
+        if (codigo == 1) {
+            SelectAplicacion.innerHTML = '<option value="">Seleccione una aplicación</option>';
+            data.forEach(aplicacion => {
+                const nombreCompleto = aplicacion.app_nombre_largo ? 
+                    `${aplicacion.app_nombre_corto} - ${aplicacion.app_nombre_largo}` : 
+                    aplicacion.app_nombre_corto;
+                SelectAplicacion.innerHTML += `<option value="${aplicacion.app_id}">${nombreCompleto}</option>`;
             });
         }
+
     } catch (error) {
-        console.error(error);
-        Swal.fire({ icon: "error", title: "Error", text: "No se pudieron cargar las aplicaciones." });
+        console.log(error)
     }
-};
+}
 
-// Limpiar formulario
-const LimpiarFormulario = () => {
-    FormPermisos.reset();
-    document.getElementById('permiso_id').value = '';
-    BtnGuardar.classList.remove('d-none');
-    BtnModificar.classList.add('d-none');
-};
-
-// Guardar permiso
 const GuardarPermiso = async (event) => {
     event.preventDefault();
-    const formData = new FormData(FormPermisos);
+    BtnGuardar.disabled = true;
 
-    try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/permisos/guardar', {
-            method: 'POST',
-            body: formData
+    if (!validarFormulario(FormPermiso, 
+        ['permiso_id', 
+          'permiso_situacion'])) {
+        Swal.fire({
+            position: "center",
+            icon: "info",
+            title: "FORMULARIO INCOMPLETO",
+            text: "Debe completar todos los campos",
+            showConfirmButton: true,
         });
-
-        const datos = await respuesta.json();
-        if (datos.codigo == 1) {
-            Swal.fire({ icon: "success", title: "Éxito", text: datos.mensaje });
-            LimpiarFormulario();
-            BuscarPermisos();
-        } else {
-            Swal.fire({ icon: "error", title: "Error", text: datos.mensaje });
-        }
-    } catch (error) {
-        console.error(error);
-        Swal.fire({ icon: "error", title: "Error", text: "No se pudo guardar el permiso." });
+        BtnGuardar.disabled = false;
+        return;
     }
-};
 
-// Modificar permiso
-const ModificarPermiso = async (event) => {
-    event.preventDefault();
-    const formData = new FormData(FormPermisos);
+    const body = new FormData(FormPermiso);
+    const url = '/clemente_final_capacitaciones_ingSoft3/API/permisos/guardar';
+    const config = {
+        method: 'POST',
+        body
+    }
 
     try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/permisos/modificar', {
-            method: 'POST',
-            body: formData
-        });
-
+        const respuesta = await fetch(url, config);
         const datos = await respuesta.json();
-        if (datos.codigo == 1) {
-            Swal.fire({ icon: "success", title: "Modificado", text: datos.mensaje });
-            LimpiarFormulario();
-            BuscarPermisos();
+        const { codigo, mensaje } = datos
+
+        if (codigo == 1) {
+            await Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Éxito",
+                text: mensaje,
+                showConfirmButton: true,
+            });
+
+            limpiarTodo();
+            BuscarPermiso();
         } else {
-            Swal.fire({ icon: "error", title: "Error", text: datos.mensaje });
-        }
-    } catch (error) {
-        console.error(error);
-        Swal.fire({ icon: "error", title: "Error", text: "Error al modificar el permiso." });
-    }
-};
-
-// Eliminar permiso
-const EliminarPermiso = async (id, nombre) => {
-    const confirmacion = await Swal.fire({
-        title: `¿Eliminar "${nombre}"?`,
-        text: "Esta acción no se puede deshacer",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar"
-    });
-
-    if (confirmacion.isConfirmed) {
-        try {
-            const respuesta = await fetch(`/clemente_final_capacitaciones_ingSoft3/API/permisos/eliminar?id=${id}`);
-            const datos = await respuesta.json();
-
-            if (datos.codigo == 1) {
-                Swal.fire({ icon: "success", title: "Eliminado", text: datos.mensaje });
-                BuscarPermisos();
-            } else {
-                Swal.fire({ icon: "error", title: "Error", text: datos.mensaje });
-            }
-        } catch (error) {
-            console.error(error);
-            Swal.fire({ icon: "error", title: "Error", text: "No se pudo eliminar." });
-        }
-    }
-};
-
-// Buscar permisos
-const BuscarPermisos = async () => {
-    try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/permisos/buscar');
-        const datos = await respuesta.json();
-
-        if (datos.codigo == 1) {
-            bodyPermisos.innerHTML = '';
-
-            datos.data.forEach((permiso, index) => {
-                bodyPermisos.innerHTML += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${permiso.permiso_nombre}</td>
-                        <td>${permiso.descripcion}</td>
-                        <td>${permiso.fecha_creacion || 'Sin fecha'}</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm modificar" 
-                                    data-id="${permiso.id_permiso}" 
-                                    data-nombre="${permiso.permiso_nombre}" 
-                                    data-desc="${permiso.descripcion}">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button class="btn btn-danger btn-sm eliminar" 
-                                    data-id="${permiso.id_permiso}" 
-                                    data-nombre="${permiso.permiso_nombre}">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                `;
+            await Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error",
+                text: mensaje,
+                showConfirmButton: true,
             });
         }
-    } catch (error) {
-        console.error(error);
-        Swal.fire({ icon: "error", title: "Error", text: "No se pudieron cargar los permisos." });
-    }
-};
 
-// Mostrar datos en formulario
+    } catch (error) {
+        console.log(error)
+    }
+    BtnGuardar.disabled = false;
+}
+
+const BuscarPermiso = async () => {
+    const url = `/clemente_final_capacitaciones_ingSoft3/API/permisos/buscar`;
+    const config = {
+        method: 'GET'
+    }
+
+    try {
+        const respuesta = await fetch(url, config);
+        const datos = await respuesta.json();
+        const { codigo, mensaje, data } = datos
+
+        if (codigo == 1) {
+            datatable.clear().draw();
+            datatable.rows.add(data).draw();
+        } else {
+            await Swal.fire({
+                position: "center",
+                icon: "info",
+                title: "Error",
+                text: mensaje,
+                showConfirmButton: true,
+            });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const datatable = new DataTable('#TablePermiso', {
+    dom: `
+        <"row mt-3 justify-content-between" 
+            <"col" l> 
+            <"col" B> 
+            <"col-3" f>
+        >
+        t
+        <"row mt-3 justify-content-between" 
+            <"col-md-3 d-flex align-items-center" i> 
+            <"col-md-8 d-flex justify-content-end" p>
+        >
+    `,
+    language: lenguaje,
+    data: [],
+    columns: [
+        {
+            title: 'No.',
+            data: 'permiso_id',
+            width: '5%',
+            render: (data, type, row, meta) => meta.row + 1
+        },
+        { 
+            title: 'Usuario', 
+            data: 'usuario_nom1', 
+            width: '20%',
+            render: (data, type, row) => {
+                return `${row.usuario_nom1 || ''} ${row.usuario_nom2 || ''} ${row.usuario_ape1 || ''} ${row.usuario_ape2 || ''}`.trim();
+            }
+        },
+        { 
+            title: 'Aplicación', 
+            data: 'app_nombre_corto', 
+            width: '15%',
+            render: (data, type, row) => {
+                return row.app_nombre_largo ? 
+                    `${row.app_nombre_corto} - ${row.app_nombre_largo}` : 
+                    row.app_nombre_corto;
+            }
+        },
+        { title: 'Nombre', data: 'permiso_nombre', width: '15%' },
+        { title: 'Clave', data: 'permiso_clave', width: '10%' },
+        { title: 'Tipo', data: 'permiso_tipo', width: '10%' },
+        {
+            title: 'Fecha',
+            data: 'permiso_fecha',
+            width: '10%',
+            render: (data, type, row) => {
+                if (data) {
+                    return new Date(data).toLocaleDateString('es-ES');
+                }
+                return 'N/A';
+            }
+        },
+        {
+            title: 'Acciones',
+            data: 'permiso_id',
+            searchable: false,
+            orderable: false,
+            width: '15%',
+            render: (data, type, row, meta) => {
+                return `
+                 <div class='d-flex justify-content-center'>
+                     <button class='btn btn-warning modificar mx-1 btn-sm' 
+                         data-id="${data}" 
+                         data-usuario_id="${row.usuario_id || ''}"  
+                         data-app_id="${row.app_id || ''}"
+                         data-permiso_nombre="${row.permiso_nombre || ''}"
+                         data-permiso_clave="${row.permiso_clave || ''}"
+                         data-permiso_desc="${row.permiso_desc || ''}"
+                         data-permiso_motivo="${row.permiso_motivo || ''}"
+                         data-permiso_tipo="${row.permiso_tipo || ''}">
+                         <i class='bi bi-pencil-square me-1'></i> Modificar
+                     </button>
+                     <button class='btn btn-danger eliminar mx-1 btn-sm' 
+                         data-id="${data}">
+                        <i class="bi bi-trash3 me-1"></i>Eliminar
+                     </button>
+                 </div>`;
+            }
+        }
+    ]
+});
+
 const llenarFormulario = (event) => {
-    const datos = event.target.closest('.modificar').dataset;
+    const datos = event.currentTarget.dataset;
+
     document.getElementById('permiso_id').value = datos.id;
-    document.getElementById('permiso_nombre').value = datos.nombre;
-    document.getElementById('descripcion').value = datos.desc;
+    document.getElementById('usuario_id').value = datos.usuario_id;
+    document.getElementById('app_id').value = datos.app_id;
+    document.getElementById('permiso_nombre').value = datos.permiso_nombre;
+    document.getElementById('permiso_clave').value = datos.permiso_clave;
+    document.getElementById('permiso_desc').value = datos.permiso_desc;
+    document.getElementById('permiso_motivo').value = datos.permiso_motivo;
+    document.getElementById('permiso_tipo').value = datos.permiso_tipo;
 
     BtnGuardar.classList.add('d-none');
     BtnModificar.classList.remove('d-none');
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-// Mostrar u ocultar tabla
-const MostrarTabla = () => {
-    if (seccionTabla.style.display === 'none') {
-        seccionTabla.style.display = 'block';
-        BuscarPermisos();
-    } else {
-        seccionTabla.style.display = 'none';
-    }
-};
-
-// --- EVENTOS ---
-document.addEventListener('DOMContentLoaded', () => {
-    CargarUsuarios();
-    CargarAplicaciones();
-    BuscarPermisos();
-
-    BtnGuardar.addEventListener('click', GuardarPermiso);
-    BtnModificar.addEventListener('click', ModificarPermiso);
-    BtnLimpiar.addEventListener('click', LimpiarFormulario);
-    BtnBuscar.addEventListener('click', MostrarTabla);
-
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('.modificar')) {
-            llenarFormulario(e);
-        }
-
-        if (e.target.closest('.eliminar')) {
-            const btn = e.target.closest('.eliminar');
-            EliminarPermiso(btn.dataset.id, btn.dataset.nombre);
-        }
+    window.scrollTo({
+        top: 0,
     });
-});
+}
+
+const limpiarTodo = () => {
+    FormPermiso.reset();
+    
+    BtnGuardar.classList.remove('d-none');
+    BtnModificar.classList.add('d-none');
+}
+
+const ModificarPermiso = async (event) => {
+    event.preventDefault();
+    BtnModificar.disabled = true;
+
+    if (!validarFormulario(FormPermiso, [
+        'permiso_id', 
+        'permiso_situacion'])) {
+        Swal.fire({
+            position: "center",
+            icon: "info",
+            title: "FORMULARIO INCOMPLETO",
+            text: "Debe completar todos los campos",
+            showConfirmButton: true,
+        });
+        BtnModificar.disabled = false;
+        return;
+    }
+
+    const body = new FormData(FormPermiso);
+    const url = '/clemente_final_capacitaciones_ingSoft3/API/permisos/modificar';
+    const config = {
+        method: 'POST',
+        body
+    }
+
+    try {
+        const respuesta = await fetch(url, config);
+        const datos = await respuesta.json();
+        const { codigo, mensaje } = datos
+
+        if (codigo == 1) {
+            await Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Éxito",
+                text: mensaje,
+                showConfirmButton: true,
+            });
+
+            limpiarTodo();
+            BuscarPermiso();
+        } else {
+            await Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error",
+                text: mensaje,
+                showConfirmButton: true,
+            });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+    BtnModificar.disabled = false;
+}
+
+const EliminarPermiso = async (e) => {
+    const idPermiso = e.currentTarget.dataset.id
+
+    const AlertaConfirmarEliminar = await Swal.fire({
+        position: "center",
+        icon: "question",
+        title: "¿Desea eliminar este permiso?",
+        text: 'Esta acción no se puede deshacer',
+        showConfirmButton: true,
+        confirmButtonText: 'Sí, Eliminar',
+        confirmButtonColor: '#dc3545',
+        cancelButtonText: 'No, Cancelar',
+        showCancelButton: true
+    });
+
+    if (AlertaConfirmarEliminar.isConfirmed) {
+        const url = `/clemente_final_capacitaciones_ingSoft3/API/permisos/eliminar?id=${idPermiso}`;
+        const config = {
+            method: 'GET'
+        }
+
+        try {
+            const consulta = await fetch(url, config);
+            const respuesta = await consulta.json();
+            const { codigo, mensaje } = respuesta;
+
+            if (codigo == 1) {
+                await Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Éxito",
+                    text: mensaje,
+                    showConfirmButton: true,
+                });
+                
+                BuscarPermiso();
+            } else {
+                await Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Error",
+                    text: mensaje,
+                    showConfirmButton: true,
+                });
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+// Cargar datos al iniciar
+CargarUsuarios();
+CargarAplicaciones();
+
+datatable.on('click', '.eliminar', EliminarPermiso);
+datatable.on('click', '.modificar', llenarFormulario);
+FormPermiso.addEventListener('submit', GuardarPermiso);
+BtnLimpiar.addEventListener('click', limpiarTodo);
+BtnModificar.addEventListener('click', ModificarPermiso);
+BtnBuscar.addEventListener('click', BuscarPermiso);

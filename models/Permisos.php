@@ -1,7 +1,6 @@
 <?php
 
 namespace Model;
-
 use Model\ActiveRecord;
 
 class Permisos extends ActiveRecord {
@@ -15,10 +14,8 @@ class Permisos extends ActiveRecord {
         'permiso_nombre',
         'permiso_clave',
         'permiso_desc',
-        'permiso_tipo',
-        'permiso_fecha',
-        'permiso_usuario_asigno',
         'permiso_motivo',
+        'permiso_tipo',
         'permiso_situacion'
     ];
     
@@ -28,30 +25,27 @@ class Permisos extends ActiveRecord {
     public $permiso_nombre;
     public $permiso_clave;
     public $permiso_desc;
-    public $permiso_tipo;
     public $permiso_fecha;
-    public $permiso_usuario_asigno;
     public $permiso_motivo;
     public $permiso_situacion;
+    public $permiso_tipo;
     
     public function __construct($permiso = [])
     {
         $this->permiso_id = $permiso['permiso_id'] ?? null;
-        $this->usuario_id = $permiso['usuario_id'] ?? 0;
-        $this->app_id = $permiso['app_id'] ?? 0;
+        $this->usuario_id = $permiso['usuario_id'] ?? null;
+        $this->app_id = $permiso['app_id'] ?? null;
         $this->permiso_nombre = $permiso['permiso_nombre'] ?? '';
         $this->permiso_clave = $permiso['permiso_clave'] ?? '';
         $this->permiso_desc = $permiso['permiso_desc'] ?? '';
-        $this->permiso_tipo = $permiso['permiso_tipo'] ?? 'FUNCIONAL';
         $this->permiso_fecha = $permiso['permiso_fecha'] ?? '';
-        $this->permiso_usuario_asigno = $permiso['permiso_usuario_asigno'] ?? 0;
         $this->permiso_motivo = $permiso['permiso_motivo'] ?? '';
         $this->permiso_situacion = $permiso['permiso_situacion'] ?? 1;
+        $this->permiso_tipo = $permiso['permiso_tipo'] ?? 'USUARIO';
     }
-
+    
     public static function EliminarPermiso($id){
         $sql = "UPDATE avpc_permiso SET permiso_situacion = 0 WHERE permiso_id = $id";
         return self::SQL($sql);
     }
-
 }

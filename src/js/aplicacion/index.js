@@ -3,7 +3,7 @@ import { validarFormulario } from '../funciones';
 import DataTable from "datatables.net-bs5";
 import { lenguaje } from "../lenguaje";
 
-const FormAplicaciones = document.getElementById('FormAplicaciones');
+const FormAplicacion = document.getElementById('FormAplicacion');
 const BtnGuardar = document.getElementById('BtnGuardar');
 const BtnModificar = document.getElementById('BtnModificar');
 const BtnLimpiar = document.getElementById('BtnLimpiar');
@@ -13,19 +13,19 @@ const GuardarAplicacion = async (event) => {
     event.preventDefault();
     BtnGuardar.disabled = true;
 
-    if (!validarFormulario(FormAplicaciones, ['app_id'])) {
+    if (!validarFormulario(FormAplicacion, ['app_id', 'app_fecha_creacion', 'app_situacion'])) {
         Swal.fire({
             position: "center",
             icon: "info",
             title: "FORMULARIO INCOMPLETO",
-            text: "Debe completar los campos obligatorios",
+            text: "Debe completar todos los campos",
             showConfirmButton: true,
         });
         BtnGuardar.disabled = false;
         return;
     }
 
-    const body = new FormData(FormAplicaciones);
+    const body = new FormData(FormAplicacion);
     const url = '/clemente_final_capacitaciones_ingSoft3/API/aplicacion/guardar';
     const config = {
         method: 'POST',
@@ -82,7 +82,7 @@ const BuscarAplicaciones = async () => {
             await Swal.fire({
                 position: "center",
                 icon: "info",
-                title: "Info",
+                title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
             });
@@ -93,7 +93,7 @@ const BuscarAplicaciones = async () => {
     }
 }
 
-const datatable = new DataTable('#TableAplicaciones', {
+const datatable = new DataTable('#TableAplicacion', {
     dom: `
         <"row mt-3 justify-content-between" 
             <"col" l> 
@@ -115,39 +115,18 @@ const datatable = new DataTable('#TableAplicaciones', {
             width: '5%',
             render: (data, type, row, meta) => meta.row + 1
         },
+        { title: 'Nombre Largo', data: 'app_nombre_largo', width: '35%' },
+        { title: 'Nombre Corto', data: 'app_nombre_corto', width: '25%' },
         { 
-            title: 'Nombre Largo', 
-            data: 'app_nombre_largo', 
-            width: '25%' 
-        },
-        { 
-            title: 'Nombre Mediano', 
-            data: 'app_nombre_medium', 
-            width: '20%' 
-        },
-        { 
-            title: 'Nombre Corto', 
-            data: 'app_nombre_corto', 
-            width: '15%' 
-        },
-        { 
-            title: 'Fecha Creación', 
+            title: 'Fecha de Creación', 
             data: 'app_fecha_creacion', 
-            width: '15%',
+            width: '20%',
             render: (data) => {
-                if(data) {
+                if (data) {
                     const fecha = new Date(data);
-                    return fecha.toLocaleDateString('es-GT');
+                    return fecha.toLocaleDateString('es-ES');
                 }
                 return '';
-            }
-        },
-        { 
-            title: 'Situación', 
-            data: 'app_situacion', 
-            width: '10%',
-            render: (data) => {
-                return data == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>';
             }
         },
         {
@@ -155,16 +134,15 @@ const datatable = new DataTable('#TableAplicaciones', {
             data: 'app_id',
             searchable: false,
             orderable: false,
-            width: '10%',
+            width: '15%',
             render: (data, type, row, meta) => {
                 return `
                  <div class='d-flex justify-content-center'>
                      <button class='btn btn-warning modificar mx-1 btn-sm' 
                          data-id="${data}" 
-                         data-largo="${row.app_nombre_largo}"
-                         data-medium="${row.app_nombre_medium}"
-                         data-corto="${row.app_nombre_corto}">
-                         <i class='bi bi-pencil-square me-1'></i> Editar
+                         data-app_nombre_largo="${row.app_nombre_largo || ''}"  
+                         data-app_nombre_corto="${row.app_nombre_corto || ''}">
+                         <i class='bi bi-pencil-square me-1'></i> Modificar
                      </button>
                      <button class='btn btn-danger eliminar mx-1 btn-sm' 
                          data-id="${data}">
@@ -180,19 +158,20 @@ const llenarFormulario = (event) => {
     const datos = event.currentTarget.dataset;
 
     document.getElementById('app_id').value = datos.id;
-    document.getElementById('app_nombre_largo').value = datos.largo;
-    document.getElementById('app_nombre_medium').value = datos.medium;
-    document.getElementById('app_nombre_corto').value = datos.corto;
+    document.getElementById('app_nombre_largo').value = datos.app_nombre_largo;
+    document.getElementById('app_nombre_corto').value = datos.app_nombre_corto;
 
     BtnGuardar.classList.add('d-none');
     BtnModificar.classList.remove('d-none');
 
-    window.scrollTo({ top: 0 });
+    window.scrollTo({
+        top: 0,
+    });
 }
 
 const limpiarTodo = () => {
-    FormAplicaciones.reset();
-    document.getElementById('app_id').value = '';
+    FormAplicacion.reset();
+    
     BtnGuardar.classList.remove('d-none');
     BtnModificar.classList.add('d-none');
 }
@@ -201,19 +180,19 @@ const ModificarAplicacion = async (event) => {
     event.preventDefault();
     BtnModificar.disabled = true;
 
-    if (!validarFormulario(FormAplicaciones, ['app_id'])) {
+    if (!validarFormulario(FormAplicacion, ['app_id', 'app_fecha_creacion', 'app_situacion'])) {
         Swal.fire({
             position: "center",
             icon: "info",
             title: "FORMULARIO INCOMPLETO",
-            text: "Debe completar los campos obligatorios",
+            text: "Debe completar todos los campos",
             showConfirmButton: true,
         });
         BtnModificar.disabled = false;
         return;
     }
 
-    const body = new FormData(FormAplicaciones);
+    const body = new FormData(FormAplicacion);
     const url = '/clemente_final_capacitaciones_ingSoft3/API/aplicacion/modificar';
     const config = {
         method: 'POST',
@@ -304,11 +283,9 @@ const EliminarAplicacion = async (e) => {
     }
 }
 
-BuscarAplicaciones();
-
 datatable.on('click', '.eliminar', EliminarAplicacion);
 datatable.on('click', '.modificar', llenarFormulario);
-FormAplicaciones.addEventListener('submit', GuardarAplicacion);
+FormAplicacion.addEventListener('submit', GuardarAplicacion);
 BtnLimpiar.addEventListener('click', limpiarTodo);
 BtnModificar.addEventListener('click', ModificarAplicacion);
 BtnBuscar.addEventListener('click', BuscarAplicaciones);

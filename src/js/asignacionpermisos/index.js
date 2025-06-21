@@ -3,35 +3,136 @@ import { validarFormulario } from '../funciones';
 import DataTable from "datatables.net-bs5";
 import { lenguaje } from "../lenguaje";
 
-const FormAsignacionPermisos = document.getElementById('FormAsignacionPermisos');
+const FormAsignacion = document.getElementById('FormAsignacion');
 const BtnGuardar = document.getElementById('BtnGuardar');
 const BtnModificar = document.getElementById('BtnModificar');
 const BtnLimpiar = document.getElementById('BtnLimpiar');
 const BtnBuscar = document.getElementById('BtnBuscar');
-const BtnVerPermisos = document.getElementById('BtnVerPermisos');
-const seccionPermisosUsuario = document.getElementById('seccionPermisosUsuario');
+const SelectUsuario = document.getElementById('asignacion_usuario_id');
+const SelectAplicacion = document.getElementById('asignacion_app_id');
+const SelectPermiso = document.getElementById('asignacion_permiso_id');
+const SelectUsuarioAsigno = document.getElementById('asignacion_usuario_asigno');
 
-let datatable, datatablePermisos;
+// Cargar usuarios en el dropdown
+const CargarUsuarios = async () => {
+    const url = `/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/obtenerUsuarios`;
+    const config = {
+        method: 'GET'
+    }
+
+    try {
+        const respuesta = await fetch(url, config);
+        const datos = await respuesta.json();
+        const { codigo, data } = datos
+
+        if (codigo == 1) {
+            // Cargar usuarios para asignar
+            SelectUsuario.innerHTML = '<option value="">Seleccione un usuario</option>';
+            data.forEach(usuario => {
+                const nombreCompleto = `${usuario.usuario_nom1} ${usuario.usuario_nom2 || ''} ${usuario.usuario_ape1} ${usuario.usuario_ape2 || ''}`.trim();
+                SelectUsuario.innerHTML += `<option value="${usuario.usuario_id}">${nombreCompleto}</option>`;
+            });
+
+            // Cargar usuarios que pueden asignar
+            SelectUsuarioAsigno.innerHTML = '<option value="">Seleccione quien asigna</option>';
+            data.forEach(usuario => {
+                const nombreCompleto = `${usuario.usuario_nom1} ${usuario.usuario_nom2 || ''} ${usuario.usuario_ape1} ${usuario.usuario_ape2 || ''}`.trim();
+                SelectUsuarioAsigno.innerHTML += `<option value="${usuario.usuario_id}">${nombreCompleto}</option>`;
+            });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// Cargar aplicaciones en el dropdown
+const CargarAplicaciones = async () => {
+    const url = `/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/obtenerAplicaciones`;
+    const config = {
+        method: 'GET'
+    }
+
+    try {
+        const respuesta = await fetch(url, config);
+        const datos = await respuesta.json();
+        const { codigo, data } = datos
+
+        if (codigo == 1) {
+            SelectAplicacion.innerHTML = '<option value="">Seleccione una aplicación</option>';
+            data.forEach(aplicacion => {
+                const nombreCompleto = aplicacion.app_nombre_largo ? 
+                    `${aplicacion.app_nombre_corto} - ${aplicacion.app_nombre_largo}` : 
+                    aplicacion.app_nombre_corto;
+                SelectAplicacion.innerHTML += `<option value="${aplicacion.app_id}">${nombreCompleto}</option>`;
+            });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// Cargar permisos basados en la aplicación seleccionada
+const CargarPermisos = async (appId = null) => {
+    let url = `/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/obtenerPermisos`;
+    if (appId) {
+        url += `?app_id=${appId}`;
+    }
+    
+    const config = {
+        method: 'GET'
+    }
+
+    try {
+        const respuesta = await fetch(url, config);
+        const datos = await respuesta.json();
+        const { codigo, data } = datos
+
+        if (codigo == 1) {
+            SelectPermiso.innerHTML = '<option value="">Seleccione un permiso</option>';
+            data.forEach(permiso => {
+                SelectPermiso.innerHTML += `<option value="${permiso.permiso_id}">${permiso.permiso_nombre} (${permiso.permiso_clave})</option>`;
+            });
+        } else {
+            SelectPermiso.innerHTML = '<option value="">No hay permisos disponibles</option>';
+        }
+
+    } catch (error) {
+        console.log(error)
+        SelectPermiso.innerHTML = '<option value="">Error al cargar permisos</option>';
+    }
+}
+
+// Event listener para cuando cambia la aplicación
+SelectAplicacion.addEventListener('change', (e) => {
+    const appId = e.target.value;
+    if (appId) {
+        CargarPermisos(appId);
+    } else {
+        SelectPermiso.innerHTML = '<option value="">Primero seleccione una aplicación</option>';
+    }
+});
 
 const GuardarAsignacion = async (event) => {
     event.preventDefault();
     BtnGuardar.disabled = true;
 
-    if (!validarFormulario(FormAsignacionPermisos, ['asignacion_id'])) {
+    if (!validarFormulario(FormAsignacion, 
+        ['asignacion_id', 
+          'asignacion_situacion'])) {
         Swal.fire({
             position: "center",
             icon: "info",
             title: "FORMULARIO INCOMPLETO",
-            text: "Debe completar los campos obligatorios",
+            text: "Debe completar todos los campos",
             showConfirmButton: true,
         });
         BtnGuardar.disabled = false;
         return;
     }
 
-    const body = new FormData(FormAsignacionPermisos);
-    body.append('asignacion_usuario_asigno', 1); 
-    
+    const body = new FormData(FormAsignacion);
     const url = '/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/guardar';
     const config = {
         method: 'POST',
@@ -53,7 +154,7 @@ const GuardarAsignacion = async (event) => {
             });
 
             limpiarTodo();
-            BuscarAsignaciones();
+            BuscarAsignacion();
         } else {
             await Swal.fire({
                 position: "center",
@@ -70,71 +171,7 @@ const GuardarAsignacion = async (event) => {
     BtnGuardar.disabled = false;
 }
 
-const CargarUsuarios = async () => {
-    try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscarUsuarios');
-        const datos = await respuesta.json();
-        
-        if (datos.codigo === 1) {
-            const selectUsuario = document.getElementById('asignacion_usuario_id');
-            const selectAsigno = document.getElementById('asignacion_usuario_asigno');
-            const filtroUsuario = document.getElementById('filtroUsuario');
-            
-            selectUsuario.innerHTML = '<option value="">Seleccione un usuario</option>';
-            selectAsigno.innerHTML = '<option value="">Seleccione quién asigna</option>';
-            filtroUsuario.innerHTML = '<option value="">Seleccione un usuario para ver sus permisos</option>';
-            
-            datos.data.forEach(usuario => {
-                const option = `<option value="${usuario.usuario_id}">${usuario.usuario_nom1} ${usuario.usuario_ape1}</option>`;
-                selectUsuario.innerHTML += option;
-                selectAsigno.innerHTML += option;
-                filtroUsuario.innerHTML += option;
-            });
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const CargarAplicaciones = async () => {
-    try {
-        const respuesta = await fetch('/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscarAplicaciones');
-        const datos = await respuesta.json();
-        
-        if (datos.codigo === 1) {
-            const selectAplicacion = document.getElementById('asignacion_app_id');
-            selectAplicacion.innerHTML = '<option value="">Seleccione una aplicación</option>';
-            
-            datos.data.forEach(aplicacion => {
-                const option = `<option value="${aplicacion.app_id}">${aplicacion.app_nombre_corto}</option>`;
-                selectAplicacion.innerHTML += option;
-            });
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const CargarPermisos = async (appId) => {
-    try {
-        const respuesta = await fetch(`/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscarPermisos?app_id=${appId}`);
-        const datos = await respuesta.json();
-        
-        if (datos.codigo === 1) {
-            const selectPermiso = document.getElementById('asignacion_permiso_id');
-            selectPermiso.innerHTML = '<option value="">Seleccione un permiso</option>';
-            
-            datos.data.forEach(permiso => {
-                const option = `<option value="${permiso.permiso_id}">${permiso.permiso_nombre} (${permiso.permiso_clave})</option>`;
-                selectPermiso.innerHTML += option;
-            });
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const BuscarAsignaciones = async () => {
+const BuscarAsignacion = async () => {
     const url = `/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscar`;
     const config = {
         method: 'GET'
@@ -146,16 +183,13 @@ const BuscarAsignaciones = async () => {
         const { codigo, mensaje, data } = datos
 
         if (codigo == 1) {
-            if (!datatable) {
-                initializeDataTable();
-            }
             datatable.clear().draw();
             datatable.rows.add(data).draw();
         } else {
             await Swal.fire({
                 position: "center",
                 icon: "info",
-                title: "Info",
+                title: "Error",
                 text: mensaje,
                 showConfirmButton: true,
             });
@@ -166,107 +200,206 @@ const BuscarAsignaciones = async () => {
     }
 }
 
-const initializeDataTable = () => {
-    datatable = new DataTable('#TableAsignacionPermisos', {
-        dom: `
-            <"row mt-3 justify-content-between" 
-                <"col" l> 
-                <"col" B> 
-                <"col-3" f>
-            >
-            t
-            <"row mt-3 justify-content-between" 
-                <"col-md-3 d-flex align-items-center" i> 
-                <"col-md-8 d-flex justify-content-end" p>
-            >
-        `,
-        language: lenguaje,
-        data: [],
-        columns: [
-            {
-                title: 'No.',
-                data: 'asignacion_id',
-                width: '5%',
-                render: (data, type, row, meta) => meta.row + 1
-            },
-            { 
-                title: 'Usuario', 
-                data: 'usuario_nom1', 
-                width: '15%',
-                render: (data, type, row) => `${row.usuario_nom1} ${row.usuario_ape1}`
-            },
-            { 
-                title: 'Aplicación', 
-                data: 'app_nombre_corto', 
-                width: '15%' 
-            },
-            { 
-                title: 'Permiso', 
-                data: 'permiso_nombre', 
-                width: '20%' 
-            },
-            { 
-                title: 'Clave', 
-                data: 'permiso_clave', 
-                width: '10%' 
-            },
-            { 
-                title: 'Fecha Asignación', 
-                data: 'asignacion_fecha', 
-                width: '10%',
-                render: (data) => {
-                    if(data) {
-                        const fecha = new Date(data);
-                        return fecha.toLocaleDateString('es-GT');
-                    }
-                    return '';
-                }
-            },
-            { 
-                title: 'Asignado por', 
-                data: 'asigno_nom1', 
-                width: '15%',
-                render: (data, type, row) => `${row.asigno_nom1} ${row.asigno_ape1}`
-            },
-            {
-                title: 'Acciones',
-                data: 'asignacion_id',
-                searchable: false,
-                orderable: false,
-                width: '10%',
-                render: (data, type, row, meta) => {
-                    return `
-                     <div class='d-flex justify-content-center'>
-                         <button class='btn btn-danger revocar mx-1 btn-sm' 
-                             data-id="${data}">
-                            <i class="bi bi-x-circle me-1"></i>Revocar
-                         </button>
-                     </div>`;
-                }
+const datatable = new DataTable('#TableAsignacion', {
+    dom: `
+        <"row mt-3 justify-content-between" 
+            <"col" l> 
+            <"col" B> 
+            <"col-3" f>
+        >
+        t
+        <"row mt-3 justify-content-between" 
+            <"col-md-3 d-flex align-items-center" i> 
+            <"col-md-8 d-flex justify-content-end" p>
+        >
+    `,
+    language: lenguaje,
+    data: [],
+    columns: [
+        {
+            title: 'No.',
+            data: 'asignacion_id',
+            width: '5%',
+            render: (data, type, row, meta) => meta.row + 1
+        },
+        { 
+            title: 'Usuario', 
+            data: 'usuario_nom1', 
+            width: '20%',
+            render: (data, type, row) => {
+                return `${row.usuario_nom1 || ''} ${row.usuario_nom2 || ''} ${row.usuario_ape1 || ''} ${row.usuario_ape2 || ''}`.trim();
             }
-        ]
-    });
+        },
+        { 
+            title: 'Aplicación', 
+            data: 'app_nombre_corto', 
+            width: '15%',
+            render: (data, type, row) => {
+                return row.app_nombre_largo ? 
+                    `${row.app_nombre_corto} - ${row.app_nombre_largo}` : 
+                    row.app_nombre_corto;
+            }
+        },
+        { 
+            title: 'Permiso', 
+            data: 'permiso_nombre', 
+            width: '15%',
+            render: (data, type, row) => {
+                return `${data} (${row.permiso_clave})`;
+            }
+        },
+        { 
+            title: 'Asignado por', 
+            data: 'asigno_nom1', 
+            width: '15%',
+            render: (data, type, row) => {
+                return `${row.asigno_nom1 || ''} ${row.asigno_ape1 || ''}`.trim();
+            }
+        },
+        {
+            title: 'Fecha',
+            data: 'asignacion_fecha',
+            width: '10%',
+            render: (data, type, row) => {
+                if (data) {
+                    return new Date(data).toLocaleDateString('es-ES');
+                }
+                return 'N/A';
+            }
+        },
+        {
+            title: 'Acciones',
+            data: 'asignacion_id',
+            searchable: false,
+            orderable: false,
+            width: '20%',
+            render: (data, type, row, meta) => {
+                return `
+                 <div class='d-flex justify-content-center'>
+                     <button class='btn btn-warning modificar mx-1 btn-sm' 
+                         data-id="${data}" 
+                         data-asignacion_usuario_id="${row.asignacion_usuario_id || ''}"  
+                         data-asignacion_app_id="${row.asignacion_app_id || ''}"
+                         data-asignacion_permiso_id="${row.asignacion_permiso_id || ''}"
+                         data-asignacion_usuario_asigno="${row.asignacion_usuario_asigno || ''}"
+                         data-asignacion_motivo="${row.asignacion_motivo || ''}">
+                         <i class='bi bi-pencil-square me-1'></i> Modificar
+                     </button>
+                     <button class='btn btn-danger eliminar mx-1 btn-sm' 
+                         data-id="${data}">
+                        <i class="bi bi-trash3 me-1"></i>Eliminar
+                     </button>
+                 </div>`;
+            }
+        }
+    ]
+});
 
-    datatable.on('click', '.revocar', RevocarPermiso);
+const llenarFormulario = async (event) => {
+    const datos = event.currentTarget.dataset;
+
+    document.getElementById('asignacion_id').value = datos.id;
+    document.getElementById('asignacion_usuario_id').value = datos.asignacion_usuario_id;
+    document.getElementById('asignacion_app_id').value = datos.asignacion_app_id;
+    document.getElementById('asignacion_usuario_asigno').value = datos.asignacion_usuario_asigno;
+    document.getElementById('asignacion_motivo').value = datos.asignacion_motivo;
+
+    // Cargar permisos para la aplicación seleccionada y luego seleccionar el permiso
+    if (datos.asignacion_app_id) {
+        await CargarPermisos(datos.asignacion_app_id);
+        document.getElementById('asignacion_permiso_id').value = datos.asignacion_permiso_id;
+    }
+
+    BtnGuardar.classList.add('d-none');
+    BtnModificar.classList.remove('d-none');
+
+    window.scrollTo({
+        top: 0,
+    });
 }
 
-const RevocarPermiso = async (e) => {
+const limpiarTodo = () => {
+    FormAsignacion.reset();
+    SelectPermiso.innerHTML = '<option value="">Primero seleccione una aplicación</option>';
+    
+    BtnGuardar.classList.remove('d-none');
+    BtnModificar.classList.add('d-none');
+}
+
+const ModificarAsignacion = async (event) => {
+    event.preventDefault();
+    BtnModificar.disabled = true;
+
+    if (!validarFormulario(FormAsignacion, [
+        'asignacion_id', 
+        'asignacion_situacion'])) {
+        Swal.fire({
+            position: "center",
+            icon: "info",
+            title: "FORMULARIO INCOMPLETO",
+            text: "Debe completar todos los campos",
+            showConfirmButton: true,
+        });
+        BtnModificar.disabled = false;
+        return;
+    }
+
+    const body = new FormData(FormAsignacion);
+    const url = '/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/modificar';
+    const config = {
+        method: 'POST',
+        body
+    }
+
+    try {
+        const respuesta = await fetch(url, config);
+        const datos = await respuesta.json();
+        const { codigo, mensaje } = datos
+
+        if (codigo == 1) {
+            await Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Éxito",
+                text: mensaje,
+                showConfirmButton: true,
+            });
+
+            limpiarTodo();
+            BuscarAsignacion();
+        } else {
+            await Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error",
+                text: mensaje,
+                showConfirmButton: true,
+            });
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+    BtnModificar.disabled = false;
+}
+
+const EliminarAsignacion = async (e) => {
     const idAsignacion = e.currentTarget.dataset.id
 
-    const AlertaConfirmarRevocacion = await Swal.fire({
+    const AlertaConfirmarEliminar = await Swal.fire({
         position: "center",
         icon: "question",
-        title: "¿Desea revocar este permiso?",
+        title: "¿Desea eliminar esta asignación?",
         text: 'Esta acción no se puede deshacer',
         showConfirmButton: true,
-        confirmButtonText: 'Sí, Revocar',
+        confirmButtonText: 'Sí, Eliminar',
         confirmButtonColor: '#dc3545',
         cancelButtonText: 'No, Cancelar',
         showCancelButton: true
     });
 
-    if (AlertaConfirmarRevocacion.isConfirmed) {
-        const url = `/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/revocar?id=${idAsignacion}`;
+    if (AlertaConfirmarEliminar.isConfirmed) {
+        const url = `/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/eliminar?id=${idAsignacion}`;
         const config = {
             method: 'GET'
         }
@@ -285,7 +418,7 @@ const RevocarPermiso = async (e) => {
                     showConfirmButton: true,
                 });
                 
-                BuscarAsignaciones();
+                BuscarAsignacion();
             } else {
                 await Swal.fire({
                     position: "center",
@@ -302,120 +435,13 @@ const RevocarPermiso = async (e) => {
     }
 }
 
-const mostrarPermisosUsuario = () => {
-    if (seccionPermisosUsuario.style.display === 'none') {
-        seccionPermisosUsuario.style.display = 'block';
-        BtnVerPermisos.textContent = 'Ocultar Permisos';
-        
-        if (!datatablePermisos) {
-            initializePermisosTable();
-        }
-    } else {
-        seccionPermisosUsuario.style.display = 'none';
-        BtnVerPermisos.textContent = 'Ver Permisos por Usuario';
-    }
-}
-
-const initializePermisosTable = () => {
-    datatablePermisos = new DataTable('#TablePermisosUsuario', {
-        dom: `
-            <"row mt-3 justify-content-between" 
-                <"col" l> 
-                <"col" B> 
-                <"col-3" f>
-            >
-            t
-            <"row mt-3 justify-content-between" 
-                <"col-md-3 d-flex align-items-center" i> 
-                <"col-md-8 d-flex justify-content-end" p>
-            >
-        `,
-        language: lenguaje,
-        data: [],
-        columns: [
-            {
-                title: 'No.',
-                data: 'permiso_id',
-                width: '10%',
-                render: (data, type, row, meta) => meta.row + 1
-            },
-            { 
-                title: 'Aplicación', 
-                data: 'app_nombre_corto', 
-                width: '20%' 
-            },
-            { 
-                title: 'Permiso', 
-                data: 'permiso_nombre', 
-                width: '30%' 
-            },
-            { 
-                title: 'Clave', 
-                data: 'permiso_clave', 
-                width: '20%' 
-            },
-            { 
-                title: 'Fecha Asignación', 
-                data: 'asignacion_fecha', 
-                width: '20%',
-                render: (data) => {
-                    if(data) {
-                        const fecha = new Date(data);
-                        return fecha.toLocaleDateString('es-GT');
-                    }
-                    return '';
-                }
-            }
-        ]
-    });
-}
-
-const buscarPermisosUsuario = async (usuarioId) => {
-    if (!usuarioId) {
-        datatablePermisos.clear().draw();
-        return;
-    }
-
-    try {
-        const respuesta = await fetch(`/clemente_final_capacitaciones_ingSoft3/API/asignacionpermisos/buscarPermisosUsuario?usuario_id=${usuarioId}`);
-        const datos = await respuesta.json();
-        
-        if (datos.codigo === 1) {
-            datatablePermisos.clear().draw();
-            datatablePermisos.rows.add(datos.data).draw();
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const limpiarTodo = () => {
-    FormAsignacionPermisos.reset();
-    document.getElementById('asignacion_id').value = '';
-    document.getElementById('asignacion_permiso_id').innerHTML = '<option value="">Seleccione primero una aplicación</option>';
-    BtnGuardar.classList.remove('d-none');
-    BtnModificar.classList.add('d-none');
-}
-
-
-document.getElementById('asignacion_app_id').addEventListener('change', (e) => {
-    if (e.target.value) {
-        CargarPermisos(e.target.value);
-    } else {
-        document.getElementById('asignacion_permiso_id').innerHTML = '<option value="">Seleccione primero una aplicación</option>';
-    }
-});
-
-document.getElementById('filtroUsuario').addEventListener('change', (e) => {
-    buscarPermisosUsuario(e.target.value);
-});
-
-FormAsignacionPermisos.addEventListener('submit', GuardarAsignacion);
-BtnLimpiar.addEventListener('click', limpiarTodo);
-BtnBuscar.addEventListener('click', BuscarAsignaciones);
-BtnVerPermisos.addEventListener('click', mostrarPermisosUsuario);
-
-
+// Cargar datos al iniciar
 CargarUsuarios();
 CargarAplicaciones();
-BuscarAsignaciones();
+
+datatable.on('click', '.eliminar', EliminarAsignacion);
+datatable.on('click', '.modificar', llenarFormulario);
+FormAsignacion.addEventListener('submit', GuardarAsignacion);
+BtnLimpiar.addEventListener('click', limpiarTodo);
+BtnModificar.addEventListener('click', ModificarAsignacion);
+BtnBuscar.addEventListener('click', BuscarAsignacion);

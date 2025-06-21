@@ -3,39 +3,26 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header bg-primary text-white text-center" style="background: linear-gradient(135deg,rgb(114, 70, 196) 0%,rgb(49, 22, 98) 100%);">
-                    <h5 class="mb-1">¡Sistema de Gestión PEREZ COMISIONES!</h5>
-                    <h4 class="mb-0">ADMINISTRACIÓN DE APLICACIONES</h4>
+                    <h5 class="mb-1">¡Sistema de Gestión PEREZ CAPACITACIONES!</h5>
+                    <h4 class="mb-0">GESTIÓN DE APLICACIONES</h4>
                 </div>
                 <div class="card-body">
-                    <form id="FormAplicaciones">
+                    <form id="FormAplicacion">
                         <input type="hidden" id="app_id" name="app_id">
                         <input type="hidden" id="app_fecha_creacion" name="app_fecha_creacion" value="">
                         <input type="hidden" id="app_situacion" name="app_situacion" value="1">
                         
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="app_nombre_largo" class="form-label">Nombre Largo</label>
+                                <label for="app_nombre_largo" class="form-label">Nombre Largo de la Aplicación</label>
                                 <input type="text" class="form-control" id="app_nombre_largo" name="app_nombre_largo" 
-                                       placeholder="Nombre completo de la aplicación" required>
+                                       placeholder="Ingrese el nombre largo de la aplicación" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="app_nombre_medium" class="form-label">Nombre Mediano</label>
-                                <input type="text" class="form-control" id="app_nombre_medium" name="app_nombre_medium" 
-                                       placeholder="Nombre mediano de la aplicación" required>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="app_nombre_corto" class="form-label">Nombre Corto</label>
+                                <label for="app_nombre_corto" class="form-label">Nombre Corto de la Aplicación</label>
                                 <input type="text" class="form-control" id="app_nombre_corto" name="app_nombre_corto" 
-                                       placeholder="Abreviación o nombre corto" required>
+                                       placeholder="Ingrese el nombre corto de la aplicación" required>
                             </div>
-                        </div>
-                        
-                        <div class="alert alert-warning">
-                            <i class="bi bi-exclamation-triangle me-2"></i>
-                            <strong>Importante:</strong> Los nombres largo y corto deben ser únicos en el sistema. No se pueden duplicar.
                         </div>
                         
                         <div class="text-center">
@@ -66,7 +53,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover" id="TableAplicaciones">
+                        <table class="table table-bordered table-hover" id="TableAplicacion">
                         </table>
                     </div>
                 </div>
