@@ -152,3 +152,4 @@ CREATE TABLE avpc_historial_act(
     FOREIGN KEY (historial_usuario_id) REFERENCES avpc_usuario(usuario_id),
     FOREIGN KEY (historial_ruta) REFERENCES avpc_rutas(ruta_id)
 );
+
